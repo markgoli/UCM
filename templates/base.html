@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0">
+    <!-- styles -->
+    <link rel="stylesheet" href="{% static 'css/vendor/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/vendor/simple-line-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/vendor/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <!-- favicon -->
+    <link rel="icon" href="favicon.ico">
+    <title>{% block title %}UCM - Uganda Catholic Music{% endblock %}</title>
+    {% block extra_css %}{% endblock %}
+</head>
+      
+<body>
+    <!-- Navbar -->
+    {% include 'navbar.html' %}
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer (optional, can be added later) -->
+    {% block footer %}{% endblock %}
+
+    <!-- SVG Icons -->
+    <svg style="display: none;">
+        <!-- SVG MAG GLASS -->
+        <symbol id="svg-mag-glass" viewBox="0 0 12 12" preserveAspectRatio="xMinYMin meet">
+            <path d="M3.094,6.916c-0.275-0.269-0.482-0.573-0.62-0.912C2.336,5.666,2.267,5.32,2.267,4.968
+                c0-0.351,0.069-0.699,0.207-1.041c0.138-0.344,0.345-0.65,0.62-0.92c0.275-0.269,0.587-0.468,0.934-0.599
+                c0.347-0.13,0.702-0.195,1.066-0.195s0.72,0.064,1.067,0.195c0.346,0.131,0.657,0.331,0.933,0.599c0.275,0.27,0.482,0.576,0.62,0.92
+                c0.139,0.342,0.207,0.69,0.207,1.041c0,0.353-0.068,0.698-0.207,1.036c-0.138,0.339-0.345,0.644-0.62,0.912
+                c-0.275,0.27-0.587,0.471-0.933,0.605C5.813,7.657,5.458,7.724,5.094,7.724s-0.72-0.066-1.066-0.202
+                C3.681,7.387,3.369,7.186,3.094,6.916z M1.494,1.443C0.996,1.93,0.622,2.479,0.374,3.092C0.125,3.705,0,4.328,0,4.962
+                s0.125,1.257,0.374,1.87c0.248,0.611,0.622,1.161,1.12,1.648c0.399,0.391,0.844,0.703,1.333,0.938
+                c0.488,0.234,0.995,0.391,1.52,0.469c0.525,0.078,1.052,0.074,1.58-0.013C6.456,9.786,6.961,9.621,7.44,9.379l2.294,2.241
+                c0.133,0.13,0.28,0.226,0.44,0.286c0.159,0.061,0.326,0.091,0.5,0.091c0.173,0,0.34-0.03,0.5-0.091s0.307-0.156,0.439-0.286
+                c0.134-0.13,0.231-0.274,0.293-0.431c0.063-0.156,0.094-0.318,0.094-0.488s-0.031-0.332-0.094-0.488
+                c-0.062-0.157-0.159-0.301-0.293-0.431L9.401,7.619C9.712,7.143,9.93,6.63,10.055,6.082c0.124-0.547,0.157-1.094,0.1-1.641
+                c-0.058-0.547-0.209-1.08-0.453-1.596c-0.245-0.517-0.58-0.983-1.007-1.401C8.196,0.967,7.634,0.605,7.008,0.363
+                C6.381,0.119,5.743-0.003,5.094-0.003S3.808,0.119,3.181,0.363C2.554,0.605,1.991,0.967,1.494,1.443z"/>
+        </symbol>
+        <!-- /SVG MAG GLASS -->
+        
+        <!-- SVG ARROW -->
+        <symbol id="svg-arrow" viewBox="0 0 10 10">
+            <path d="M5 0L10 5L5 10L4.3 9.3L8.6 5L4.3 0.7L5 0Z" fill="currentColor"/>
+        </symbol>
+        <!-- /SVG ARROW -->
+        
+        <!-- SVG CHECK -->
+        <symbol id="svg-check" viewBox="0 0 10 10">
+            <path d="M1 5L4 8L9 1" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </symbol>
+        <!-- /SVG CHECK -->
+        
+        <!-- SVG GRID -->
+        <symbol id="svg-grid" viewBox="0 0 16 16">
+            <rect x="1" y="1" width="6" height="6" stroke="currentColor" fill="none" stroke-width="1.5"/>
+            <rect x="9" y="1" width="6" height="6" stroke="currentColor" fill="none" stroke-width="1.5"/>
+            <rect x="1" y="9" width="6" height="6" stroke="currentColor" fill="none" stroke-width="1.5"/>
+            <rect x="9" y="9" width="6" height="6" stroke="currentColor" fill="none" stroke-width="1.5"/>
+        </symbol>
+        <!-- /SVG GRID -->
+        
+        <!-- SVG LIST -->
+        <symbol id="svg-list" viewBox="0 0 16 16">
+            <line x1="1" y1="4" x2="15" y2="4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="1" y1="8" x2="15" y2="8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="1" y1="12" x2="15" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </symbol>
+        <!-- /SVG LIST -->
+        
+        <!-- SVG CROSS -->
+        <symbol id="svg-cross" viewBox="0 0 12 12">
+            <path d="M1 1L11 11M11 1L1 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </symbol>
+        <!-- /SVG CROSS -->
+        
+        <!-- SVG PLUS -->
+        <symbol id="svg-plus" viewBox="0 0 12 12">
+            <line x1="6" y1="1" x2="6" y2="11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </symbol>
+        <!-- /SVG PLUS -->
+        
+        <!-- SVG MINUS -->
+        <symbol id="svg-minus" viewBox="0 0 12 12">
+            <line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </symbol>
+        <!-- /SVG MINUS -->
+    </svg>
+
+    <!-- Scripts -->
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

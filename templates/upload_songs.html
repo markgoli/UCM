@@ -1,0 +1,377 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Upload Song - UCM{% endblock %}
+
+{% block content %}
+<div class="section-wrap">
+    <div class="section">
+        <div class="content">
+            <h2 class="subsection-title">Upload New Song</h2>
+            <hr class="line-separator">
+            
+            <form method="post" enctype="multipart/form-data" class="song-upload-form">
+                {% csrf_token %}
+                
+                <!-- Song Information Section -->
+                <div class="form-section">
+                    <h3 class="form-section-title">Song Information</h3>
+                    
+                    <!-- Title -->
+                    <div class="form-row">
+                        <label for="{{ form.title.id_for_label }}" class="rl-label">
+                            Title <span class="required">*</span>
+                        </label>
+                        {{ form.title }}
+                        {% if form.title.errors %}
+                            <div class="error-message">{{ form.title.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Composer -->
+                    <div class="form-row">
+                        <label for="{{ form.composer.id_for_label }}" class="rl-label">
+                            Composer <span class="required">*</span>
+                        </label>
+                        {{ form.composer }}
+                        {% if form.composer.errors %}
+                            <div class="error-message">{{ form.composer.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Arranged By -->
+                    <div class="form-row">
+                        <label for="{{ form.arranged_by.id_for_label }}" class="rl-label">
+                            Arranged By
+                        </label>
+                        {{ form.arranged_by }}
+                        {% if form.arranged_by.errors %}
+                            <div class="error-message">{{ form.arranged_by.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Part of Mass -->
+                    <div class="form-row">
+                        <label for="{{ form.part_of_mass.id_for_label }}" class="rl-label">
+                            Part of Mass <span class="required">*</span>
+                        </label>
+                        {{ form.part_of_mass }}
+                        {% if form.part_of_mass.errors %}
+                            <div class="error-message">{{ form.part_of_mass.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Season -->
+                    <div class="form-row">
+                        <label for="{{ form.season.id_for_label }}" class="rl-label">
+                            Season <span class="required">*</span>
+                        </label>
+                        {{ form.season }}
+                        {% if form.season.errors %}
+                            <div class="error-message">{{ form.season.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- YouTube Link -->
+                    <div class="form-row">
+                        <label for="{{ form.youtube_link.id_for_label }}" class="rl-label">
+                            YouTube Link
+                        </label>
+                        {{ form.youtube_link }}
+                        {% if form.youtube_link.errors %}
+                            <div class="error-message">{{ form.youtube_link.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- MTN Checkbox -->
+                    <div class="form-row">
+                        <label class="checkbox" for="{{ form.mtn.id_for_label }}">
+                            {{ form.mtn }}
+                            <span class="box">
+                                <svg class="svg-check">
+                                    <use xlink:href="#svg-check"></use>
+                                </svg>
+                            </span>
+                            This song has an MTN number
+                        </label>
+                        {% if form.mtn.errors %}
+                            <div class="error-message">{{ form.mtn.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- MTN Number (hidden by default) -->
+                    <div class="form-row" id="mtn-number-row" style="display: none;">
+                        <label for="{{ form.mtn_number.id_for_label }}" class="rl-label">
+                            MTN Number <span class="required">*</span>
+                        </label>
+                        {{ form.mtn_number }}
+                        {% if form.mtn_number.errors %}
+                            <div class="error-message">{{ form.mtn_number.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Music Sheet Section -->
+                <div class="form-section">
+                    <h3 class="form-section-title">Music Sheet (Optional)</h3>
+                    
+                    <div class="form-row">
+                        <label for="{{ form.music_sheet.id_for_label }}" class="rl-label">
+                            Music Sheet File
+                        </label>
+                        {{ form.music_sheet }}
+                        {% if form.music_sheet.help_text %}
+                            <small class="help-text">{{ form.music_sheet.help_text }}</small>
+                        {% endif %}
+                        {% if form.music_sheet.errors %}
+                            <div class="error-message">{{ form.music_sheet.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-row">
+                        <label for="{{ form.ms_version.id_for_label }}" class="rl-label">
+                            Music Sheet Version
+                        </label>
+                        {{ form.ms_version }}
+                        {% if form.ms_version.errors %}
+                            <div class="error-message">{{ form.ms_version.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- MIDI File Section -->
+                <div class="form-section">
+                    <h3 class="form-section-title">MIDI File (Optional)</h3>
+                    
+                    <div class="form-row">
+                        <label for="{{ form.midi_file.id_for_label }}" class="rl-label">
+                            MIDI File
+                        </label>
+                        {{ form.midi_file }}
+                        {% if form.midi_file.help_text %}
+                            <small class="help-text">{{ form.midi_file.help_text }}</small>
+                        {% endif %}
+                        {% if form.midi_file.errors %}
+                            <div class="error-message">{{ form.midi_file.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-row">
+                        <label for="{{ form.midi_version.id_for_label }}" class="rl-label">
+                            MIDI Version
+                        </label>
+                        {{ form.midi_version }}
+                        {% if form.midi_version.errors %}
+                            <div class="error-message">{{ form.midi_version.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- MP3 File Section -->
+                <div class="form-section">
+                    <h3 class="form-section-title">MP3 File (Optional)</h3>
+                    
+                    <div class="form-row">
+                        <label for="{{ form.mp3_file.id_for_label }}" class="rl-label">
+                            MP3 File
+                        </label>
+                        {{ form.mp3_file }}
+                        {% if form.mp3_file.help_text %}
+                            <small class="help-text">{{ form.mp3_file.help_text }}</small>
+                        {% endif %}
+                        {% if form.mp3_file.errors %}
+                            <div class="error-message">{{ form.mp3_file.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-row">
+                        <label for="{{ form.mp3_version.id_for_label }}" class="rl-label">
+                            MP3 Version
+                        </label>
+                        {{ form.mp3_version }}
+                        {% if form.mp3_version.errors %}
+                            <div class="error-message">{{ form.mp3_version.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Form Errors -->
+                {% if form.non_field_errors %}
+                    <div class="error-message">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+                
+                <!-- Submit Button -->
+                <div class="form-row separated">
+                    <button type="submit" class="button full">Upload Song</button>
+                    <a href="{% url 'dashboard' %}" class="button secondary full" style="margin-top: 10px;">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.song-upload-form {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.form-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.form-section-title {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: #333;
+    border-bottom: 2px solid #667eea;
+    padding-bottom: 10px;
+}
+
+.form-row {
+    margin-bottom: 20px;
+}
+
+.rl-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+.required {
+    color: #e74c3c;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.checkbox input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.help-text {
+    display: block;
+    margin-top: 5px;
+    font-size: 12px;
+    color: #666;
+}
+
+.error-message {
+    color: #e74c3c;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.button {
+    padding: 12px 24px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.button:hover {
+    background: #5568d3;
+}
+
+.button.secondary {
+    background: #6c757d;
+}
+
+.button.secondary:hover {
+    background: #5a6268;
+}
+
+.button.full {
+    width: 100%;
+}
+
+.form-row.separated {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function() {
+    // Show/hide MTN number field based on MTN checkbox
+    const mtnCheckbox = document.getElementById('{{ form.mtn.id_for_label }}');
+    const mtnNumberRow = document.getElementById('mtn-number-row');
+    const mtnNumberInput = document.getElementById('{{ form.mtn_number.id_for_label }}');
+    
+    function toggleMtnNumber() {
+        if (mtnCheckbox && mtnNumberRow) {
+            if (mtnCheckbox.checked) {
+                mtnNumberRow.style.display = 'block';
+                if (mtnNumberInput) {
+                    mtnNumberInput.setAttribute('required', 'required');
+                }
+            } else {
+                mtnNumberRow.style.display = 'none';
+                if (mtnNumberInput) {
+                    mtnNumberInput.removeAttribute('required');
+                    mtnNumberInput.value = '';
+                }
+            }
+        }
+    }
+    
+    // Initialize on page load
+    if (mtnCheckbox && mtnNumberRow) {
+        toggleMtnNumber();
+        
+        // Add event listener
+        mtnCheckbox.addEventListener('change', toggleMtnNumber);
+    }
+    
+    // Form validation
+    const form = document.querySelector('.song-upload-form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            // Check if MTN is checked but number is empty
+            if (mtnCheckbox && mtnCheckbox.checked && mtnNumberInput && !mtnNumberInput.value.trim()) {
+                e.preventDefault();
+                alert('Please enter an MTN number or uncheck the MTN option.');
+                mtnNumberInput.focus();
+                return false;
+            }
+        });
+    }
+})();
+</script>
+{% endblock %}
+

@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Upload Song - UCM{% endblock %}
+
+{% block content %}
+    <div class="section">
+        <a href="{% url 'dashboard' %}" class="back-link">
+            ← Back to Dashboard
+        </a>
+
+        <div class="song-detail-card">
+            <div class="song-header">
+                <div class="song-artwork">
+                    {% if song.thumbnail %}
+                        <img src="{{ song.thumbnail.url }}" alt="{{ song.title }}">
+                    {% else %}
+                        ♫
+                    {% endif %}
+                </div>
+
+                <div class="song-main-info">
+                    <h1 class="song-title-large">{{ song.title }}</h1>
+                    <p class="song-artist-large">{{ song.artist }}</p>
+
+                    <div class="song-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Duration</span>
+                            <span class="stat-value">{{ song.duration|default:"--:--" }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Plays</span>
+                            <span class="stat-value">{{ song.plays|default:0 }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Uploaded</span>
+                            <span class="stat-value">{{ song.created_at|date:"M d, Y" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="audio-player" style="background-color: darkblue;">
+                        <audio id="audioPlayer" style="display: none;">
+                            {% if song.audio_file %}
+                                <source src="{{ song.audio_file.url }}" type="audio/mpeg">
+                            {% endif %}
+                        </audio>
+                        <div class="audio-controls">
+                            <button class="play-btn" id="playBtn">▶</button>
+                            <div class="progress-container">
+                                <div class="time-display">
+                                    <span id="currentTime">0:00</span>
+                                    <span id="totalTime">{{ song.duration|default:"0:00" }}</span>
+                                </div>
+                                <div class="progress-bar" id="progressBar">
+                                    <div class="progress-fill" id="progressFill"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <a href="{{ song.audio_file.url }}" download class="btn btn-primary">
+                            ⬇ Download
+                        </a>
+                        <button class="btn btn-outline" onclick="shareLink()">
+                            🔗 Share
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="song-details">
+                <h2 class="section-title">Song Details</h2>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">Album</span>
+                        <span class="detail-value">{{ song.album|default:"Unknown Album" }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Genre</span>
+                        <span class="detail-value">{{ song.genre|default:"Catholic/Sacred" }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Language</span>
+                        <span class="detail-value">{{ song.language|default:"English" }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Uploaded By</span>
+                        <span class="detail-value">{{ song.uploader.username }}</span>
+                    </div>
+                </div>
+
+                {% if song.description %}
+                    <h3 class="section-title">Description</h3>
+                    <p class="description">{{ song.description }}</p>
+                {% endif %}
+
+                {% if song.lyrics %}
+                    <h3 class="section-title">Lyrics</h3>
+                    <div class="lyrics-section">{{ song.lyrics }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const audio = document.getElementById('audioPlayer');
+        const playBtn = document.getElementById('playBtn');
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+        const currentTimeEl = document.getElementById('currentTime');
+        const totalTimeEl = document.getElementById('totalTime');
+
+        let isPlaying = false;
+
+        playBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                audio.pause();
+                playBtn.textContent = '▶';
+            } else {
+                audio.play();
+                playBtn.textContent = '⏸';
+            }
+            isPlaying = !isPlaying;
+        });
+
+        audio.addEventListener('timeupdate', () => {
+            const progress = (audio.currentTime / audio.duration) * 100;
+            progressFill.style.width = progress + '%';
+            currentTimeEl.textContent = formatTime(audio.currentTime);
+        });
+
+        audio.addEventListener('loadedmetadata', () => {
+            totalTimeEl.textContent = formatTime(audio.duration);
+        });
+
+        audio.addEventListener('ended', () => {
+            playBtn.textContent = '▶';
+            isPlaying = false;
+            progressFill.style.width = '0%';
+        });
+
+        progressBar.addEventListener('click', (e) => {
+            const rect = progressBar.getBoundingClientRect();
+            const percent = (e.clientX - rect.left) / rect.width;
+            audio.currentTime = percent * audio.duration;
+        });
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function shareLink() {
+            const url = window.location.href;
+            if (navigator.share) {
+                navigator.share({
+                    title: '{{ song.title }}',
+                    text: 'Check out this song on Catholic Music',
+                    url: url
+                });
+            } else {
+                navigator.clipboard.writeText(url);
+                alert('Link copied to clipboard!');
+            }
+        }
+    </script>
+{% endblock %}
