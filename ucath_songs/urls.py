@@ -2,8 +2,7 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    # ============ MAIN PAGES ============
-    path('', DashboardView.as_view(), name='dashboard'),
+    path('', LandingView.as_view(), name='dashboard'),
     path('song/<slug:slug>/', SongDetailView.as_view(), name='song_detail'),
     path('songs/create/', SongCreateView.as_view(), name='upload_song'),
     path('song/<slug:slug>/edit/', SongUpdateView.as_view(), name='song_edit'),

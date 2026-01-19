@@ -1,4 +1,4 @@
-from django.views.generic import View, ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import TemplateView, View, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
@@ -10,10 +10,18 @@ from .models import Song, MusicSheet, MidiFile, Mp3File
 from .forms import SongUploadForm
 
 
+class LandingView(TemplateView):
+    template_name = 'd-board.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        return context
+
+
 class DashboardView(ListView):
     """Main dashboard showing all songs with search functionality"""
     model = Song
-    template_name = 'dashboard.html'
+    template_name = 'd-board.html'
     context_object_name = 'songs'
     paginate_by = 12
     
@@ -261,3 +269,83 @@ class UserProfileView(LoginRequiredMixin, ListView):
         # If you add a user field to Song model later, filter by user
         # For now, return all songs
         return Song.objects.all().order_by('-created_at')
+
+
+
+from django.db.models import Q
+from django.views.generic import ListView
+from .models import Song
+
+class DashboardView(ListView):
+    """Main dashboard showing all songs with search functionality"""
+    model = Song
+    template_name = 'dashboard.html'
+    context_object_name = 'songs'
+    paginate_by = 12
+    
+    def get_queryset(self):
+        # Get base queryset
+        base_queryset = super().get_queryset()
+        
+        # Initialize with base queryset
+        queryset = base_queryset
+        
+        # Apply filters based on request parameters
+        search_query = self.request.GET.get('q', '')
+        season_filter = self.request.GET.get('season', '')
+        composer_filter = self.request.GET.get('composer', '')
+        mass_part_filter = self.request.GET.get('part_of_mass', '')
+        
+        # Apply text search if provided
+        if search_query:
+            queryset = queryset.filter(
+                Q(title__icontains=search_query) |
+                Q(composer__icontains=search_query) |
+                Q(arranged_by__icontains=search_query) |
+                Q(season__icontains=search_query) |
+                Q(part_of_mass__icontains=search_query)
+            )
+        
+        # Apply specific filters
+        if season_filter:
+            queryset = queryset.filter(season=season_filter)
+        
+        if composer_filter:
+            queryset = queryset.filter(composer__iexact=composer_filter)
+        
+        if mass_part_filter:
+            queryset = queryset.filter(part_of_mass=mass_part_filter)
+        
+        # Apply ordering
+        ordered_queryset = queryset.order_by('-created_at')
+        
+        return ordered_queryset
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_query'] = self.request.GET.get('q', '')
+        context['selected_season'] = self.request.GET.get('season', '')
+        context['selected_composer'] = self.request.GET.get('composer', '')
+        context['selected_mass_part'] = self.request.GET.get('part_of_mass', '')
+        
+        # Get all seasons from model
+        context['seasons'] = Song.season_choices
+        
+        # Get unique composers
+        composers = Song.objects.values_list('composer', flat=True).distinct()
+        unique_composers = {}
+        for composer in composers:
+            if composer:
+                key = composer.lower()
+                if key not in unique_composers:
+                    unique_composers[key] = composer
+        context['composers'] = sorted(unique_composers.values())
+        
+        # Get all mass parts from model
+        context['mass_parts'] = Song.mass_parts
+        
+        # Get counts
+        context['total_songs'] = self.get_queryset().count()
+        context['showing_count'] = len(context['songs'])
+        
+        return context

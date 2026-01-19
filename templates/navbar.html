@@ -1,46 +1,23 @@
 {% load static %}
-<nav class="navbar">
-    <div class="navbar-container">
-        <!-- Logo - Left -->
-        <div class="navbar-logo">
-            <a href="{% url 'dashboard' %}" class="logo-link">
-                <div class="logo-icon">♫</div>
-                <h1 class="logo-text">UCM</h1>
-            </a>
-        </div>
 
-        <!-- Search Bar - Middle -->
-        <div class="navbar-search">
-            <form method="GET" action="{% url 'dashboard' %}" class="search-form">
-                <input 
-                    type="text" 
-                    name="q" 
-                    class="search-input" 
-                    placeholder="Search for songs, artists, or albums..."
-                    value="{{ request.GET.q }}"
-                >
-                <button type="submit" class="search-btn">
-                    <svg class="svg-mag-glass">
-                        <use xlink:href="#svg-mag-glass"></use>
-                    </svg>
-                </button>
-            </form>
+<nav class="flex items-center justify-between px-6 lg:px-16 py-5 bg-[#0f172a]/95 backdrop-blur-lg text-white sticky top-0 z-50 border-b border-white/10">
+    <div class="flex items-center gap-12">
+        <a href="{% url 'dashboard' %}"><span class="serif text-2xl tracking-tight italic">Cantus - UCM</span></a>
+        <div class="hidden lg:flex items-center gap-8 text-[11px] uppercase tracking-[0.2em] font-bold text-slate-400">
+            <a href="#" class="hover:text-white transition">Library</a>
+            <a href="#" class="hover:text-white transition">Instruments</a>
+            <a href="#" class="hover:text-white transition">New Arrivals</a>
         </div>
-
-        <!-- Actions - Right -->
-        <div class="navbar-actions">
-            <a href="{% url 'upload_song' %}" class="btn btn-primary">
-                <span>↑</span> Upload Song
-            </a>
-            {% if user.is_authenticated %}
-            <a href="{% url 'profile' %}" class="btn btn-secondary">
-                    {{ user.username }}
-                </a>
-                <a href="{% url 'logout' %}" class="btn btn-secondary">Logout</a>
-            {% else %}
-                <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
-            {% endif %}
-        </div>
+    </div>
+    <div class="flex items-center gap-6">
+        {% if request.user.is_authenticated %}
+        <span class="serif text-2xl tracking-tight"> Hi, {{ request.user|capfirst }}</span>
+        {% else %}
+        <button onclick="toggleModal()" class="text-slate-400 hover:text-white transition font-semibold">Sign In</button>
+        {% endif %}
+        <button class="bg-white text-slate-900 px-6 py-2 rounded-full font-bold hover:bg-slate-200 transition">
+            Upload Music
+        </button>
     </div>
 </nav>
 

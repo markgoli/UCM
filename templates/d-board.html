@@ -1,0 +1,276 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<header class="hero-v4 text-white pt-20 pb-40 px-8">
+    <div class="musical-lines"></div>
+    <div class="max-w-7xl mx-auto relative z-10">
+        <div class="grid lg:grid-cols-2 gap-20 items-center">
+            
+            <div class="text-left">
+                <div class="inline-flex items-center gap-3 px-4 py-2 bg-white/5 border border-white/10 rounded-full mb-8">
+                    <span class="flex h-2 w-2 rounded-full bg-indigo-400"></span>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-indigo-200">The 2026 Music Collection is Live</span>
+                </div>
+                
+                <h1 class="serif text-7xl md:text-8xl leading-[0.85] mb-8">
+                    Every Note, <br>
+                    Every Instrument.
+                    <span class="text-xl md:text-3xl italic text-slate-400">Master the art of the written score.</span>
+                </h1>
+                
+                <p class="text-slate-400 text-lg max-w-lg leading-relaxed mb-12">
+                    Discover a world-class archive of digital notation. From classical manuscripts to contemporary film scores, curated for professional performance.
+                </p>
+            </div>
+
+            <div class="hidden lg:block relative">
+                <div class="aspect-square w-full bg-gradient-to-tr from-slate-800 to-slate-700 rounded-3xl rotate-3 relative overflow-hidden shadow-2xl border border-white/10">
+                    <div class="absolute inset-0 bg-black/40"></div>
+                    <div class="absolute inset-12 border border-white/20 p-6 flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <div class="h-1 w-full bg-white/20"></div>
+                            <div class="h-1 w-full bg-white/20"></div>
+                            <div class="h-1 w-3/4 bg-white/20"></div>
+                        </div>
+                        <div class="serif text-5xl italic text-white/30 text-right uppercase tracking-tighter">
+                            Pianoforte
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-6 -left-6 bg-white p-6 rounded-2xl shadow-2xl max-w-[180px] -rotate-3 border border-slate-100">
+                    <p class="text-slate-900 font-bold text-sm mb-1 italic serif">"The best archive for contemporary arrangements."</p>
+                    <p class="text-[9px] uppercase tracking-widest text-slate-400 font-bold">— London Symphony</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-20 max-w-5xl mx-auto">
+            <div class="search-container bg-white rounded-2xl p-1 shadow-2xl flex flex-col md:flex-row items-center gap-2">
+                <div class="flex items-center flex-1 w-full px-5 py-4">
+                    <svg class="w-6 h-6 text-slate-300 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <input type="text" placeholder="Search by composer, instrument, genre, or mood..." 
+                        class="w-full text-slate-900 focus:outline-none placeholder:text-slate-400 text-base font-medium bg-transparent">
+                </div>
+                <div class="hidden md:block w-[1px] h-10 bg-slate-100 mx-2"></div>
+                <select class="hidden md:block bg-transparent text-slate-500 font-bold text-[11px] uppercase tracking-widest px-4 focus:outline-none cursor-pointer">
+                    <option>All Instruments</option>
+                    <option>Piano</option>
+                    <option>Strings</option>
+                    <option>Woodwinds</option>
+                </select>
+                <button class="w-full md:w-[60px] h-[60px] bg-slate-900 text-white flex items-center justify-center rounded-xl font-bold hover:bg-indigo-600 transition-all duration-300 shadow-xl group">
+                    <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="flex justify-center gap-8 mt-6 text-slate-500 text-[10px] uppercase tracking-[0.2em] font-bold">
+                <span>Popular:</span>
+                <a href="#" class="text-slate-300 hover:text-white transition">Chopin</a>
+                <a href="#" class="text-slate-300 hover:text-white transition">Hans Zimmer</a>
+                <a href="#" class="text-slate-300 hover:text-white transition">Jazz Standards</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="bg-[#fcfcfb] py-24 px-6 lg:px-16 border-t border-slate-100">
+    <div class="max-w-7xl mx-auto">
+        
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+            <div class="max-w-xl">
+                <span class="text-indigo-600 text-[10px] uppercase tracking-[0.3em] font-bold mb-4 block">Archive Directory</span>
+                <h2 class="serif text-5xl text-slate-900 mb-4">Explore by <span class="italic text-slate-500">Instrument</span></h2>
+                <p class="text-slate-500 text-base leading-relaxed font-medium">
+                    Select your discipline to filter our library of over 500,000 verified manuscripts and digital arrangements.
+                </p>
+            </div>
+            <button class="group flex items-center gap-3 text-[10px] uppercase tracking-[0.2em] font-bold text-slate-900 border-b-2 border-slate-200 pb-2 hover:border-indigo-600 transition-all">
+                Browse Full Catalog <span class="group-hover:translate-x-2 transition-transform">→</span>
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[650px]">
+            <div class="md:col-span-8 relative group cursor-pointer overflow-hidden rounded-3xl bg-[#0f172a] border border-white/10 shadow-2xl transition-all duration-700 hover:bg-[#1e293b]">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-indigo-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                
+                <div class="absolute -right-6 -bottom-6 opacity-[0.08] group-hover:opacity-[0.15] transition-all duration-1000 group-hover:scale-110">
+                    <svg width="420" height="420" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="0.3">
+                        <rect x="4" y="10" width="2" height="11"/><rect x="8" y="6" width="2" height="15"/><rect x="12" y="3" width="2" height="18"/><rect x="16" y="6" width="2" height="15"/><rect x="20" y="10" width="2" height="11"/>
+                        <path d="M2 21h20" stroke-width="1"/>
+                    </svg>
+                </div>
+
+                <div class="absolute bottom-10 left-10 z-20">
+                    <span class="text-indigo-400 text-[10px] uppercase tracking-[0.4em] font-bold mb-4 block">Magnum Opus</span>
+                    <h3 class="serif text-6xl text-white transition-all duration-500">Pipe Organ</h3>
+                    <p class="text-slate-400 text-[11px] mt-4 uppercase tracking-widest font-medium">1,240 Liturgical Arrangements</p>
+                </div>
+            </div>
+
+            <div class="md:col-span-4 relative group cursor-pointer overflow-hidden rounded-3xl bg-[#1e293b] border border-white/5 shadow-xl transition-all duration-700">
+                <div class="absolute -right-12 -top-12 opacity-[0.1] group-hover:rotate-12 transition-transform duration-1000">
+                    <svg width="320" height="320" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="0.4">
+                        <path d="M12 22V8M5 12c0 4 3 7 7 7s7-3 7-7V5H5v7zM8 5v7M16 5v7"/>
+                    </svg>
+                </div>
+
+                <div class="absolute bottom-10 left-10 z-20">
+                    <h3 class="serif text-4xl text-white mb-2">Strings</h3>
+                    <p class="text-slate-400 text-[10px] uppercase tracking-[0.2em] font-bold">Violin, Cello & Viola</p>
+                </div>
+            </div>
+
+            <div class="md:col-span-5 relative group cursor-pointer overflow-hidden rounded-3xl bg-[#1e293b] border border-white/5 shadow-xl transition-all duration-700 h-[300px] md:h-auto">
+                <div class="absolute center inset-0 flex items-center justify-center opacity-[0.05] group-hover:scale-110 transition-transform duration-1000">
+                    <svg width="250" height="250" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="0.5">
+                        <path d="M9 18V5l10 2v13"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="20" r="3"/>
+                    </svg>
+                </div>
+
+                <div class="absolute bottom-10 left-10 z-20">
+                    <h3 class="serif text-4xl text-white mb-2">Woodwinds</h3>
+                    <p class="text-slate-400 text-[10px] uppercase tracking-[0.2em] font-bold">Flute, Oboe & Clarinet</p>
+                </div>
+            </div>
+
+            <div class="md:col-span-7 relative group cursor-pointer overflow-hidden rounded-3xl bg-[#020617] border border-white/10 shadow-2xl transition-all duration-700 h-[300px] md:h-auto">
+                <div class="absolute -right-20 -bottom-20 opacity-[0.06] group-hover:opacity-[0.12] transition-all duration-1000">
+                    <svg width="500" height="500" viewBox="0 0 24 24" fill="white">
+                        <path d="M11 2h2v7h7v2h-7v11h-2v-11h-7v-2h7z"/>
+                    </svg>
+                </div>
+
+                <div class="absolute bottom-12 left-12 z-20">
+                    <h3 class="serif text-5xl text-white mb-2 italic tracking-tighter">Brass & Percussion</h3>
+                    <p class="text-indigo-400 text-[11px] uppercase tracking-widest font-bold">Trumpet, Horn & Timpani</p>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</section>
+
+<section class="bg-[#fcfcfb] py-20 px-6 lg:px-16">
+    <div class="max-w-7xl mx-auto">
+        
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 pb-8 border-b border-slate-200 gap-6">
+            <div>
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="w-2 h-2 bg-indigo-600 rounded-full"></span>
+                    <span class="text-[10px] uppercase tracking-[0.4em] font-bold text-slate-400">Database Index</span>
+                </div>
+                <h2 class="serif text-5xl text-slate-900 italic">Latest <span class="not-italic text-slate-400">Manuscripts</span></h2>
+            </div>
+            
+            <div class="flex gap-8 text-[10px] uppercase tracking-widest font-black text-slate-400">
+                <button class="text-slate-900 border-b-2 border-slate-900 pb-1">All Scores</button>
+                <button class="hover:text-slate-900 transition">Liturgical</button>
+                <button class="hover:text-slate-900 transition">Choral</button>
+                <button class="hover:text-slate-900 transition">Organ</button>
+            </div>
+        </div>
+
+        <div class="hidden md:grid grid-cols-12 px-6 py-4 text-[9px] uppercase tracking-[0.2em] font-black text-slate-400 border-b border-slate-100">
+            <div class="col-span-5">Composition Title & Composer</div>
+            <div class="col-span-2">Category</div>
+            <div class="col-span-2">Liturgical Season</div>
+            <div class="col-span-2 text-right">Difficulty</div>
+            <div class="col-span-1 text-right">Action</div>
+        </div>
+
+        <div class="divide-y divide-slate-100">
+            
+            <div class="grid grid-cols-1 md:grid-cols-12 items-center px-6 py-8 hover:bg-slate-50/50 transition-colors group cursor-pointer">
+                <div class="col-span-5 flex items-center gap-6">
+                    <div class="w-12 h-16 bg-slate-100 flex-shrink-0 flex items-center justify-center border border-slate-200 text-slate-300 group-hover:bg-white group-hover:text-indigo-600 transition-all">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                    </div>
+                    <div>
+                        <h4 class="serif text-xl text-slate-900 group-hover:text-indigo-900 transition-colors">Missa Papae Marcelli: Kyrie</h4>
+                        <p class="text-slate-400 text-xs font-medium uppercase tracking-tighter mt-1">Giovanni Pierluigi da Palestrina</p>
+                    </div>
+                </div>
+                
+                <div class="col-span-2 mt-4 md:mt-0">
+                    <span class="px-3 py-1 bg-slate-100 text-slate-600 text-[9px] uppercase tracking-widest font-bold">Polyphony</span>
+                </div>
+                
+                <div class="col-span-2 text-slate-500 text-[11px] font-medium">
+                    Ordinary of the Mass
+                </div>
+                
+                <div class="col-span-2 text-right pr-4">
+                    <div class="flex justify-end gap-1">
+                        <span class="w-1.5 h-1.5 bg-slate-900"></span>
+                        <span class="w-1.5 h-1.5 bg-slate-900"></span>
+                        <span class="w-1.5 h-1.5 bg-slate-900"></span>
+                        <span class="w-1.5 h-1.5 bg-slate-200"></span>
+                    </div>
+                </div>
+
+                <div class="col-span-1 text-right">
+                    <button class="text-slate-300 hover:text-slate-900 transition-colors">
+                        <svg class="w-5 h-5 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 items-center px-6 py-8 hover:bg-slate-50/50 transition-colors group cursor-pointer">
+                <div class="col-span-5 flex items-center gap-6">
+                    <div class="w-12 h-16 bg-slate-100 flex-shrink-0 flex items-center justify-center border border-slate-200 text-slate-300 group-hover:bg-white group-hover:text-indigo-600 transition-all">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                    </div>
+                    <div>
+                        <h4 class="serif text-xl text-slate-900 group-hover:text-indigo-900 transition-colors">Toccata in D Minor</h4>
+                        <p class="text-slate-400 text-xs font-medium uppercase tracking-tighter mt-1">J.S. Bach</p>
+                    </div>
+                </div>
+                
+                <div class="col-span-2 mt-4 md:mt-0">
+                    <span class="px-3 py-1 bg-indigo-50 text-indigo-700 text-[9px] uppercase tracking-widest font-bold">Pipe Organ</span>
+                </div>
+                
+                <div class="col-span-2 text-slate-500 text-[11px] font-medium">
+                    Postlude / General
+                </div>
+                
+                <div class="col-span-2 text-right pr-4">
+                    <div class="flex justify-end gap-1">
+                        <span class="w-1.5 h-1.5 bg-slate-900"></span>
+                        <span class="w-1.5 h-1.5 bg-slate-900"></span>
+                        <span class="w-1.5 h-1.5 bg-slate-900"></span>
+                        <span class="w-1.5 h-1.5 bg-slate-900"></span>
+                    </div>
+                </div>
+
+                <div class="col-span-1 text-right">
+                    <button class="text-slate-300 hover:text-slate-900 transition-colors">
+                        <svg class="w-5 h-5 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="bg-slate-900 py-24 px-6 relative overflow-hidden">
+    <div class="max-w-3xl mx-auto text-center relative z-10 text-white">
+        <h2 class="serif text-5xl mb-6 italic">Publish your work.</h2>
+        <p class="text-slate-400 text-base mb-10 leading-relaxed">
+            Are you a composer or an arranger? Share your music with a community <br class="hidden md:block"> of dedicated performers and earn through our creator fund.
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <button class="bg-indigo-600 px-10 py-4 rounded-xl font-bold hover:bg-indigo-500 transition shadow-xl shadow-indigo-900/40">Upload a Score</button>
+            <button class="bg-slate-800 border border-slate-700 px-10 py-4 rounded-xl font-bold hover:bg-slate-700 transition">Browse Catalog</button>
+        </div>
+    </div>
+    <div class="absolute -top-24 -left-24 w-96 h-96 bg-indigo-500/10 rounded-full blur-[120px]"></div>
+</section>
+
+{% endblock %}
