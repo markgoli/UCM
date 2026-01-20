@@ -14,6 +14,43 @@
     <body class="antialiased">
         {% include 'navbar.html' %}
 
+        <div id="dynamic-alerts-container" class="fixed top-8 right-8 z-[2000] flex flex-col gap-4 w-full max-w-sm pointer-events-none">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="django-message pointer-events-auto transform transition-all duration-500 translate-x-0 opacity-100 flex items-stretch bg-white border border-slate-200 shadow-xl rounded-none overflow-hidden" 
+                         role="alert">
+                        
+                        <div class="w-1.5 {% if message.tags == 'success' %}bg-emerald-600{% elif message.tags == 'error' or message.tags == 'danger' %}bg-red-600{% else %}bg-indigo-600{% endif %}"></div>
+                        
+                        <div class="flex-1 p-5 flex items-start gap-4">
+                            <div class="mt-0.5">
+                                {% if message.tags == 'success' %}
+                                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                                {% elif message.tags == 'error' or message.tags == 'danger' %}
+                                    <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                {% else %}
+                                    <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                {% endif %}
+                            </div>
+        
+                            <div class="flex-1">
+                                <p class="text-[10px] uppercase tracking-[0.2em] font-black text-slate-400 mb-1">
+                                    {% if message.tags %}{{ message.tags }}{% else %}Notification{% endif %}
+                                </p>
+                                <p class="text-xs text-slate-700 font-medium leading-relaxed">
+                                    {{ message }}
+                                </p>
+                            </div>
+        
+                            <button onclick="this.parentElement.parentElement.remove()" class="text-slate-300 hover:text-slate-900 transition-colors">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
         <main class="main-content">
             {% block content %}{% endblock %}
         </main>
@@ -91,6 +128,24 @@
                 <p class="text-slate-400 text-[11px]">&copy; {% now "Y" %} Cantus - UCM Exchange Archive. Handcrafted for the Global Music Community.</p>
             </div>
         </footer>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Find all messages
+                const alerts = document.querySelectorAll('.django-message');
+                
+                alerts.forEach(alert => {
+                    // Only auto-hide success or info messages
+                    if (alert.innerText.toLowerCase().includes('success') || alert.innerText.toLowerCase().includes('info')) {
+                        setTimeout(() => {
+                            alert.style.opacity = '0';
+                            alert.style.transform = 'translateX(20px)';
+                            setTimeout(() => alert.remove(), 500);
+                        }, 5000); // 5 seconds
+                    }
+                });
+            });
+        </script>
 
         <script>
             function toggleModal() {

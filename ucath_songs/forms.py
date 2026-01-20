@@ -1,3 +1,4 @@
+from pickle import TRUE
 from django import forms
 from .models import Song, MusicSheet, MidiFile, Mp3File
 
@@ -49,23 +50,23 @@ class SongUploadForm(forms.ModelForm):
         required=True
     )
     
-    mtn = forms.BooleanField(
+    mto = forms.BooleanField(
         required=False,
         widget=forms.CheckboxInput(attrs={
             'class': 'form-check-input',
-            'id': 'id_mtn'
+            'id': 'id_mto'
         })
     )
     
-    mtn_number = forms.CharField(
+    mto_number = forms.CharField(
         max_length=256,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Enter MTN number',
-            'id': 'id_mtn_number'
+            'placeholder': 'Enter MTO number',
+            'id': 'id_mto_number'
         }),
         required=False,
-        help_text='Required if MTN is selected'
+        help_text='Required if MTO is selected'
     )
     
     youtube_link = forms.URLField(
@@ -81,10 +82,10 @@ class SongUploadForm(forms.ModelForm):
     music_sheet = forms.FileField(
         widget=forms.FileInput(attrs={
             'class': 'form-control',
-            'accept': '.pdf,.png,.jpg,.jpeg'
+            'accept': '.pdf'
         }),
-        required=False,
-        help_text='Upload music sheet (PDF or image) - Optional'
+        required=True,
+        help_text='Upload music sheet (PDF)'
     )
     
     ms_version = forms.CharField(
@@ -138,23 +139,23 @@ class SongUploadForm(forms.ModelForm):
         model = Song
         fields = [
             'title', 'composer', 'arranged_by', 'part_of_mass', 
-            'season', 'mtn', 'mtn_number', 'youtube_link'
+            'season', 'mto', 'mto_number', 'youtube_link'
         ]
     
     def clean(self):
         cleaned_data = super().clean()
-        mtn = cleaned_data.get('mtn')
-        mtn_number = cleaned_data.get('mtn_number', '').strip()
+        mto = cleaned_data.get('mto')
+        mto_number = cleaned_data.get('mto_number', '').strip()
         
-        # If MTN is checked, mtn_number is required
-        if mtn and not mtn_number:
+        # If MTo is checked, mto_number is required
+        if mto and not mto_number:
             raise forms.ValidationError({
-                'mtn_number': 'MTN number is required when MTN is selected.'
+                'mto_number': 'MTo number is required when MTo is selected.'
             })
         
-        # Set empty string for mtn_number if MTN is not checked
-        if not mtn:
-            cleaned_data['mtn_number'] = ''
+        # Set empty string for mto_number if MTo is not checked
+        if not mto:
+            cleaned_data['mto_number'] = ''
         
         # If music_sheet is provided, ms_version should be provided
         music_sheet = cleaned_data.get('music_sheet')

@@ -4,7 +4,7 @@
     <div class="flex items-center gap-12">
         <a href="{% url 'dashboard' %}"><span class="serif text-2xl tracking-tight italic">Cantus - UCM</span></a>
         <div class="hidden lg:flex items-center gap-8 text-[11px] uppercase tracking-[0.2em] font-bold text-slate-400">
-            <a href="#" class="hover:text-white transition">Library</a>
+            <a href="{% url 'song_library' %}" class="hover:text-white transition">Library</a>
             <a href="#" class="hover:text-white transition">Instruments</a>
             <a href="#" class="hover:text-white transition">New Arrivals</a>
         </div>
@@ -15,9 +15,11 @@
         {% else %}
         <button onclick="toggleModal()" class="text-slate-400 hover:text-white transition font-semibold">Sign In</button>
         {% endif %}
-        <button class="bg-white text-slate-900 px-6 py-2 rounded-full font-bold hover:bg-slate-200 transition">
-            Upload Music
-        </button>
+        <a href="{% url 'upload_song' %}">
+            <button class="bg-white text-slate-900 px-6 py-2 rounded-full font-bold hover:bg-slate-200 transition">
+                Upload a Score
+            </button>
+        </a>
     </div>
 </nav>
 

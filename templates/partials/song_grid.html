@@ -1,0 +1,65 @@
+<div id="songGrid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8 w-full">
+    {% for song in songs %}
+    <div class="song-card score-card group cursor-pointer relative bg-white border border-slate-100 p-4 transition-all duration-500"
+         data-detail-url="{% url 'song_detail' slug=song.slug %}"
+         onclick="navigateToDetails(this)">
+        
+        <div class="relative score-preview aspect-[3/4] bg-slate-50 overflow-hidden mb-6 border border-slate-50">
+            <div class="absolute inset-0 opacity-80 group-hover:opacity-100 transition-all duration-700 pointer-events-none">
+                {% with sheet=song.musicsheet_set.first %}
+                    {% if sheet and sheet.thumbnail %}
+                        <img src="{{ sheet.thumbnail.url }}" 
+                             alt="{{ song.title }}" 
+                             class="w-full h-full object-cover object-top scale-100 border-zinc-200 transition-all duration-500">
+                    {% else %}
+                        <div class="w-full h-full bg-slate-50 p-8 flex flex-col justify-center border-b border-slate-100">
+                            <div class="space-y-3 opacity-10">
+                                <div class="h-1 bg-slate-900 w-full"></div>
+                                <div class="h-1 bg-slate-900 w-5/6"></div>
+                                <div class="h-1 bg-slate-900 w-full"></div>
+                            </div>
+                            <span class="mt-4 serif text-[10px] uppercase tracking-widest text-slate-300 text-center">Manuscript Preview</span>
+                        </div>
+                    {% endif %}
+                {% endwith %}
+            </div>
+        
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/10 to-transparent"></div>
+
+            <div class="absolute bottom-2 right-2 z-30">
+                {% with audio=song.mp3file_set.first %}
+                    {% if audio %}
+                        <button onclick="handleAudioPlay(event, this, 'audio-{{ song.slug }}')" 
+                                class="w-10 h-10 bg-slate-900 text-white flex items-center justify-center shadow-lg hover:bg-indigo-600 transition-all duration-300 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
+                            <svg id="play-icon-{{ song.slug }}" class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            <svg id="pause-icon-{{ song.slug }}" class="w-4 h-4 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                            <audio id="audio-{{ song.slug }}" src="{{ audio.mp3_file.url }}" preload="none"></audio>
+                        </button>
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <div class="absolute bottom-4 left-4 z-10">
+                <span class="bg-white/90 backdrop-blur text-slate-900 text-[8px] px-2 py-1 uppercase tracking-widest font-black shadow-sm">
+                    {{ song.get_season_display }}
+                </span>
+            </div>
+        </div>
+
+        <div class="space-y-1">
+            <p class="text-[9px] uppercase tracking-[0.2em] font-black text-indigo-600">{{ song.composer }}</p>
+            <h3 class="serif text-xl text-slate-900 leading-tight">{{ song.title }}</h3>
+            <div class="pt-4 flex items-center justify-between text-slate-400">
+                <span class="text-[9px] uppercase tracking-widest font-bold">{{ song.get_part_of_mass_display }}</span>
+                <svg class="w-4 h-4 text-slate-900 opacity-20 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-span-1 sm:col-span-2 xl:col-span-4 py-32 text-center border-2 border-dashed border-slate-300 w-full">
+        <p class="serif text-xl text-slate-600 tracking-widest font-light">No manuscripts found.</p>
+    </div>
+    {% endfor %}
+</div>

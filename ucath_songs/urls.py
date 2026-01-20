@@ -3,10 +3,11 @@ from .views import *
 
 urlpatterns = [
     path('', LandingView.as_view(), name='dashboard'),
-    path('song/<slug:slug>/', SongDetailView.as_view(), name='song_detail'),
-    path('songs/create/', SongCreateView.as_view(), name='upload_song'),
-    path('song/<slug:slug>/edit/', SongUpdateView.as_view(), name='song_edit'),
-    path('song/<slug:slug>/delete/', SongDeleteView.as_view(), name='song_delete'),
+    path('music-scores/library/', SongLibraryListView.as_view(), name='song_library'),
+    path('music-scores/<slug:slug>/details/', SongDetailView.as_view(), name='song_detail'),
+    path('music-scores/upload/', SongCreateView.as_view(), name='upload_song'),
+    path('music-scores/<slug:slug>/edit/', SongUpdateView.as_view(), name='song_edit'),
+    path('music-scores/<slug:slug>/delete/', SongDeleteView.as_view(), name='song_delete'),
     path('login/', UserLoginView.as_view(), name='login'),
     path('logout/', UserLogoutView.as_view(), name='logout'),
     path('register/', UserRegisterView.as_view(), name='register'),

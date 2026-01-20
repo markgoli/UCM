@@ -18,74 +18,39 @@ class LandingView(TemplateView):
         return context
 
 
-class DashboardView(ListView):
-    """Main dashboard showing all songs with search functionality"""
+class SongLibraryListView(ListView):
     model = Song
-    template_name = 'd-board.html'
     context_object_name = 'songs'
     paginate_by = 12
-    
+
+    def get_template_names(self):
+        if self.request.headers.get('HX-Request'):
+            return ['partials/song_grid.html']
+        return ['songs_listing.html']
+
     def get_queryset(self):
-        queryset = super().get_queryset()
-        search_query = self.request.GET.get('q', '')
-        season_filter = self.request.GET.get('season', '')
-        composer_filter = self.request.GET.get('composer', '')
-        mass_part_filter = self.request.GET.get('part_of_mass', '')
+        queryset = Song.objects.filter(status='pending_approval').order_by("-created_at")
         
-        # Text search
-        if search_query:
-            queryset = queryset.filter(
-                Q(title__icontains=search_query) |
-                Q(composer__icontains=search_query) |
-                Q(arranged_by__icontains=search_query) |
-                Q(season__icontains=search_query) |
-                Q(part_of_mass__icontains=search_query)
-            )
-        
-        # Filter by season
-        if season_filter:
-            queryset = queryset.filter(season=season_filter)
-        
-        # Filter by composer (case-insensitive)
-        if composer_filter:
-            queryset = queryset.filter(composer__iexact=composer_filter)
-        
-        # Filter by part of mass
-        if mass_part_filter:
-            queryset = queryset.filter(part_of_mass=mass_part_filter)
-        
-        return queryset.order_by('-created_at')
-    
+        # Search
+        q = self.request.GET.get('q')
+        if q:
+            queryset = queryset.filter(Q(title__icontains=q) | Q(composer__icontains=q))
+            
+        # Filters
+        seasons = self.request.GET.getlist('season')
+        if seasons:
+            queryset = queryset.filter(season__in=seasons)
+            
+        parts = self.request.GET.getlist('part')
+        if parts:
+            queryset = queryset.filter(part_of_mass__in=parts)
+            
+        return queryset
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['search_query'] = self.request.GET.get('q', '')
-        context['selected_season'] = self.request.GET.get('season', '')
-        context['selected_composer'] = self.request.GET.get('composer', '')
-        context['selected_mass_part'] = self.request.GET.get('part_of_mass', '')
-        
-        # Get all seasons from model
-        context['seasons'] = Song.season_choices
-        
-        # Get unique composers (case-insensitive grouping)
-        composers = Song.objects.values_list('composer', flat=True).distinct()
-        # Group by lowercase to get unique composers
-        unique_composers = {}
-        for composer in composers:
-            if composer:
-                key = composer.lower()
-                if key not in unique_composers:
-                    unique_composers[key] = composer
-        context['composers'] = sorted(unique_composers.values())
-        
-        # Get all mass parts from model
+        context['season_choices'] = Song.season_choices
         context['mass_parts'] = Song.mass_parts
-        
-        # Get total count for display (before pagination)
-        queryset = self.get_queryset()
-        context['total_songs'] = queryset.count()
-        # Showing count is the number of items on current page
-        context['showing_count'] = len(context['songs'])
-        
         return context
 
 
@@ -95,7 +60,7 @@ class SongCreateView(CreateView):
     model = Song
     form_class = SongUploadForm
     template_name = 'upload_songs.html'
-    success_url = reverse_lazy('dashboard')
+    success_url = reverse_lazy('song_library')
     login_url = reverse_lazy('login')
     
     def form_valid(self, form):
@@ -146,6 +111,9 @@ class SongCreateView(CreateView):
             messages.success(self.request, f'Song "{song.title}" uploaded successfully! It will be reviewed before publication.')
         
         return response
+    
+    def form_invalid(self, form):
+        return super().form_invalid(form)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -220,15 +188,19 @@ class SongDeleteView(LoginRequiredMixin, DeleteView):
 # ============ AUTHENTICATION VIEWS ============
 class UserLoginView(LoginView):
     """User login view"""
-    template_name = 'login.html'
+    template_name = 'd-board.html'
     redirect_authenticated_user = True
     
     def get_success_url(self):
         return reverse_lazy('dashboard')
     
     def form_valid(self, form):
-        messages.success(self.request, f'Welcome back, {form.get_user().username}!')
+        messages.success(self.request, f'Welcome back, {form.get_user().username.upper()}!')
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Invalid Username or Password.')
+        return super().form_invalid(form)
 
 
 class UserLogoutView(LogoutView):
@@ -272,80 +244,5 @@ class UserProfileView(LoginRequiredMixin, ListView):
 
 
 
-from django.db.models import Q
-from django.views.generic import ListView
-from .models import Song
 
-class DashboardView(ListView):
-    """Main dashboard showing all songs with search functionality"""
-    model = Song
-    template_name = 'dashboard.html'
-    context_object_name = 'songs'
-    paginate_by = 12
-    
-    def get_queryset(self):
-        # Get base queryset
-        base_queryset = super().get_queryset()
-        
-        # Initialize with base queryset
-        queryset = base_queryset
-        
-        # Apply filters based on request parameters
-        search_query = self.request.GET.get('q', '')
-        season_filter = self.request.GET.get('season', '')
-        composer_filter = self.request.GET.get('composer', '')
-        mass_part_filter = self.request.GET.get('part_of_mass', '')
-        
-        # Apply text search if provided
-        if search_query:
-            queryset = queryset.filter(
-                Q(title__icontains=search_query) |
-                Q(composer__icontains=search_query) |
-                Q(arranged_by__icontains=search_query) |
-                Q(season__icontains=search_query) |
-                Q(part_of_mass__icontains=search_query)
-            )
-        
-        # Apply specific filters
-        if season_filter:
-            queryset = queryset.filter(season=season_filter)
-        
-        if composer_filter:
-            queryset = queryset.filter(composer__iexact=composer_filter)
-        
-        if mass_part_filter:
-            queryset = queryset.filter(part_of_mass=mass_part_filter)
-        
-        # Apply ordering
-        ordered_queryset = queryset.order_by('-created_at')
-        
-        return ordered_queryset
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['search_query'] = self.request.GET.get('q', '')
-        context['selected_season'] = self.request.GET.get('season', '')
-        context['selected_composer'] = self.request.GET.get('composer', '')
-        context['selected_mass_part'] = self.request.GET.get('part_of_mass', '')
-        
-        # Get all seasons from model
-        context['seasons'] = Song.season_choices
-        
-        # Get unique composers
-        composers = Song.objects.values_list('composer', flat=True).distinct()
-        unique_composers = {}
-        for composer in composers:
-            if composer:
-                key = composer.lower()
-                if key not in unique_composers:
-                    unique_composers[key] = composer
-        context['composers'] = sorted(unique_composers.values())
-        
-        # Get all mass parts from model
-        context['mass_parts'] = Song.mass_parts
-        
-        # Get counts
-        context['total_songs'] = self.get_queryset().count()
-        context['showing_count'] = len(context['songs'])
-        
-        return context
+
