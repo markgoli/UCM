@@ -47,34 +47,28 @@
         </div>
 
         <div class="mt-20 max-w-5xl mx-auto">
-            <div class="search-container bg-white rounded-2xl p-1 shadow-2xl flex flex-col md:flex-row items-center gap-2">
+            <form action="{% url 'song_library' %}" method="GET" class="search-container bg-white rounded-2xl p-1 shadow-2xl flex flex-col md:flex-row items-center gap-2">
+                
                 <div class="flex items-center flex-1 w-full px-5 py-4">
-                    <svg class="w-6 h-6 text-slate-300 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                    <input type="text" placeholder="Search by composer, instrument, genre, or mood..." 
-                        class="w-full text-slate-900 focus:outline-none placeholder:text-slate-400 text-base font-medium bg-transparent">
+                    <input type="text" name="q" placeholder="Search by composer, title, or liturgical season..." 
+                        class="w-full text-slate-900 focus:outline-none placeholder:text-slate-500 text-base font-medium bg-transparent">
                 </div>
-                <div class="hidden md:block w-[1px] h-10 bg-slate-100 mx-2"></div>
-                <select class="hidden md:block bg-transparent text-slate-500 font-bold text-[11px] uppercase tracking-widest px-4 focus:outline-none cursor-pointer">
-                    <option>All Instruments</option>
-                    <option>Piano</option>
-                    <option>Strings</option>
-                    <option>Woodwinds</option>
-                </select>
-                <button class="w-full md:w-[60px] h-[60px] bg-slate-900 text-white flex items-center justify-center rounded-xl font-bold hover:bg-indigo-600 transition-all duration-300 shadow-xl group">
+        
+                <button type="submit" class="w-full md:w-[60px] h-[60px] text-slate-800 flex items-center justify-center rounded-xl font-bold hover:bg-slate-200 transition-all duration-300 group">
                     <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
                 </button>
-            </div>
+            </form>
+        
             <div class="flex justify-center gap-8 mt-6 text-slate-500 text-[10px] uppercase tracking-[0.2em] font-bold">
                 <span>Popular:</span>
-                <a href="#" class="text-slate-300 hover:text-white transition">Chopin</a>
-                <a href="#" class="text-slate-300 hover:text-white transition">Hans Zimmer</a>
-                <a href="#" class="text-slate-300 hover:text-white transition">Jazz Standards</a>
+                <a href="{% url 'song_library' %}?q=Gloria" class="text-slate-400 hover:text-indigo-600 transition">Gloria</a>
+                <a href="{% url 'song_library' %}?q=Amazing" class="text-slate-400 hover:text-indigo-600 transition">Amazing Grace</a>
+                <a href="{% url 'song_library' %}?part=kyrie" class="text-slate-400 hover:text-indigo-600 transition">Kyrie</a>
             </div>
         </div>
+
     </div>
 </header>
 

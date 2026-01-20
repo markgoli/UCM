@@ -11,7 +11,7 @@ class SongUploadForm(forms.ModelForm):
         max_length=256,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Enter song title'
+            'placeholder': 'Enter the Song title'
         }),
         required=True
     )
@@ -20,7 +20,7 @@ class SongUploadForm(forms.ModelForm):
         max_length=256,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Enter composer name'
+            'placeholder': 'Enter name of the Composer'
         }),
         required=True
     )
@@ -29,7 +29,7 @@ class SongUploadForm(forms.ModelForm):
         max_length=256,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Enter arranger name (optional)'
+            'placeholder': 'Enter Arranger name (optional)'
         }),
         required=False
     )

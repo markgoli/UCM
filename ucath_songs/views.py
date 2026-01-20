@@ -14,6 +14,7 @@ class LandingView(TemplateView):
     template_name = 'd-board.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['mass_parts'] = Song.mass_parts
         
         return context
 
@@ -29,12 +30,13 @@ class SongLibraryListView(ListView):
         return ['songs_listing.html']
 
     def get_queryset(self):
-        queryset = Song.objects.filter(status='pending_approval').order_by("-created_at")
+        queryset = Song.objects.filter(status='published').order_by("-created_at")
         
         # Search
         q = self.request.GET.get('q')
+        print(q)
         if q:
-            queryset = queryset.filter(Q(title__icontains=q) | Q(composer__icontains=q))
+            queryset = queryset.filter(Q(title__icontains=q) | Q(composer__icontains=q) | Q(part_of_mass__icontains=q) | Q(season__icontains=q))
             
         # Filters
         seasons = self.request.GET.getlist('season')
@@ -125,22 +127,16 @@ class SongCreateView(CreateView):
 
 
 class SongDetailView(DetailView):
-    """Detailed view of a single song"""
     model = Song
     template_name = 'song_detail.html'
     context_object_name = 'song'
-    slug_field = 'slug'
-    slug_url_kwarg = 'slug'
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        song = self.get_object()
-        
-        # Get all related files
-        context['music_sheets'] = MusicSheet.objects.filter(song=song)
-        context['midi_files'] = MidiFile.objects.filter(song=song)
-        context['mp3_files'] = Mp3File.objects.filter(song=song)
-        
+        # Fetching all related instances
+        context['sheets'] = self.object.musicsheet_set.all()
+        context['midis'] = self.object.midifile_set.all()
+        context['audios'] = self.object.mp3file_set.all()
         return context
 
 
