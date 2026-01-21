@@ -1,13 +1,13 @@
 from django.views.generic import TemplateView, View, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.db.models import Q
 from django.contrib import messages
 from .models import Song, MusicSheet, MidiFile, Mp3File
-from .forms import SongUploadForm
+from .forms import *
 
 
 class LandingView(TemplateView):
@@ -166,18 +166,17 @@ class SongUpdateView(LoginRequiredMixin, UpdateView):
         return context
 
 
-class SongDeleteView(LoginRequiredMixin, DeleteView):
-    """Delete a song"""
+class SongDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Song
-    template_name = 'song_confirm_delete.html'
-    success_url = reverse_lazy('dashboard')
-    slug_field = 'slug'
-    slug_url_kwarg = 'slug'
-    login_url = reverse_lazy('login')
+    success_url = reverse_lazy('admin_arrivals')
     
+    def test_func(self):
+        return self.request.user.is_staff
+
     def delete(self, request, *args, **kwargs):
+        # Get the song title before it's deleted to use in the message
         song = self.get_object()
-        messages.success(request, f'Song "{song.title}" deleted successfully!')
+        messages.success(request, f"Manuscript '{song.title}' has been permanently purged from the registry.")
         return super().delete(request, *args, **kwargs)
 
 
@@ -191,7 +190,7 @@ class UserLoginView(LoginView):
         return reverse_lazy('dashboard')
     
     def form_valid(self, form):
-        messages.success(self.request, f'Welcome back, {form.get_user().username.upper()}!')
+        messages.success(self.request, f'Welcome back, {form.get_user().username.upper()}! \n Cantus - UCM is here for you!.')
         return super().form_valid(form)
 
     def form_invalid(self, form):
@@ -238,6 +237,64 @@ class UserProfileView(LoginRequiredMixin, ListView):
         # For now, return all songs
         return Song.objects.all().order_by('-created_at')
 
+
+
+class AdminArrivalsView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = Song
+    template_name = 'admin/admin_new_arrival.html'
+    context_object_name = 'songs'
+    
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def get_queryset(self):
+        # Admins see everything, but we prioritize 'draft' status
+        return Song.objects.all().order_by('status', '-created_at')
+
+class AdminSongUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Song
+    form_class = SongForm
+    template_name = 'admin/admin_song_detail.html'
+    
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        if self.request.POST:
+            data['sheets'] = SheetFormSet(self.request.POST, self.request.FILES, instance=self.object)
+            data['audios'] = Mp3FormSet(self.request.POST, self.request.FILES, instance=self.object)
+            data['midis'] = MidiFormSet(self.request.POST, self.request.FILES, instance=self.object)
+        else:
+            data['sheets'] = SheetFormSet(instance=self.object)
+            data['audios'] = Mp3FormSet(instance=self.object)
+            data['midis'] = MidiFormSet(instance=self.object)
+        return data
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        sheets = context['sheets']
+        audios = context['audios']
+        midis = context['midis']
+        
+        if sheets.is_valid() and audios.is_valid() and midis.is_valid():
+            form.save()
+            sheets.instance = self.object
+            sheets.save()
+            audios.instance = self.object
+            audios.save()
+            midis.instance = self.object
+            midis.save()
+            return redirect('admin_arrivals')
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
+
+class SongDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Song
+    success_url = reverse_lazy('admin_arrivals')
+    
+    def test_func(self):
+        return self.request.user.is_staff
 
 
 

@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Manuscript Details - UCM{% endblock %}
+
+{% block content %}
+
+<section class="bg-[#fcfcfb] min-h-screen">
+    <div class="grid grid-cols-1 lg:grid-cols-12">
+        
+        <div class="lg:col-span-4 p-12 bg-white border-r border-slate-100 min-h-screen">
+            <a href="{% url 'admin_arrivals' %}" class="text-[10px] uppercase font-black text-slate-400 hover:text-slate-900 flex items-center gap-2 mb-12 transition">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"></path></svg> Back to Queue
+            </a>
+
+            <form method="POST" class="space-y-8">
+                {% csrf_token %}
+                <h2 class="serif text-3xl text-slate-900 mb-8">Edit Manuscript</h2>
+                
+                {{ form.as_p }}
+
+                <div class="pt-8 border-t border-slate-100 flex gap-4">
+                    <button type="submit" name="status" value="published" class="flex-1 bg-green-600 text-white py-4 text-[10px] font-black uppercase tracking-widest hover:bg-green-700 transition">
+                        Approve & Publish
+                    </button>
+                    <button type="submit" name="status" value="draft" class="flex-1 bg-slate-900 text-white py-4 text-[10px] font-black uppercase tracking-widest hover:bg-slate-700 transition">
+                        Save as Draft
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="lg:col-span-8 p-12 space-y-12">
+            
+            <div class="bg-white p-8 border border-slate-100 shadow-sm">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-[12px] uppercase tracking-[0.3em] font-black text-slate-900">1. Music Sheets (PDF)</h3>
+                    <button onclick="openUploadModal('sheet')" class="text-indigo-600 text-[10px] font-bold uppercase">+ Add New Folio</button>
+                </div>
+                <div class="grid grid-cols-3 gap-4">
+                    {% for sheet in sheets %}
+                    <div class="relative group aspect-[3/4] bg-slate-50 border border-slate-100 overflow-hidden">
+                        <img src="{{ sheet.thumbnail.url }}" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-slate-900/80 opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center p-4">
+                            <span class="text-white text-[10px] font-bold mb-4">{{ sheet.ms_version }}</span>
+                            <button class="text-red-400 text-[9px] uppercase font-black hover:text-white transition">Remove</button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-8 border border-slate-100">
+                    <h3 class="text-[12px] uppercase tracking-[0.3em] font-black text-slate-900 mb-6">2. Audio Versions (MP3)</h3>
+                    <div class="space-y-3">
+                        {% for audio in audios %}
+                        <div class="flex items-center justify-between p-3 bg-slate-50 border border-slate-100">
+                            <span class="text-[10px] font-bold text-slate-600">{{ audio.ms_version }}</span>
+                            <button class="text-slate-300 hover:text-red-600 transition"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                        </div>
+                        {% endfor %}
+                        <button class="w-full py-4 border-2 border-dashed border-slate-200 text-[10px] uppercase font-black text-slate-400 hover:border-slate-400 hover:text-slate-600 transition">+ Upload MP3</button>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-8 border border-slate-100">
+                    <h3 class="text-[12px] uppercase tracking-[0.3em] font-black text-slate-900 mb-6">3. Midi Files</h3>
+                    </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

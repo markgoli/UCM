@@ -1,6 +1,7 @@
 from pickle import TRUE
 from django import forms
 from .models import Song, MusicSheet, MidiFile, Mp3File
+from django.forms import inlineformset_factory
 
 
 class SongUploadForm(forms.ModelForm):
@@ -189,3 +190,19 @@ class SongUploadForm(forms.ModelForm):
         
         return cleaned_data
 
+
+
+class SongForm(forms.ModelForm):
+    class Meta:
+        model = Song
+        fields = ['title', 'composer', 'season', 'part_of_mass', 'status', 'slug']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'w-full p-4 border border-slate-200 focus:outline-indigo-600 serif text-xl'}),
+            'composer': forms.TextInput(attrs={'class': 'w-full p-4 border border-slate-200 focus:outline-indigo-600'}),
+            'status': forms.Select(attrs={'class': 'w-full p-4 border border-slate-200'}),
+        }
+
+# Inline formsets allow managing related files on the same page as the Song
+SheetFormSet = inlineformset_factory(Song, MusicSheet, fields=['music_sheet', 'ms_version'], extra=1, can_delete=True)
+Mp3FormSet = inlineformset_factory(Song, Mp3File, fields=['mp3_file', 'mp3_version'], extra=1, can_delete=True)
+MidiFormSet = inlineformset_factory(Song, MidiFile, fields=['midi_file', 'midi_version'], extra=1, can_delete=True)
