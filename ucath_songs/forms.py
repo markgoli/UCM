@@ -191,16 +191,51 @@ class SongUploadForm(forms.ModelForm):
         return cleaned_data
 
 
-
 class SongForm(forms.ModelForm):
     class Meta:
         model = Song
-        fields = ['title', 'composer', 'season', 'part_of_mass', 'status', 'slug']
-        widgets = {
-            'title': forms.TextInput(attrs={'class': 'w-full p-4 border border-slate-200 focus:outline-indigo-600 serif text-xl'}),
-            'composer': forms.TextInput(attrs={'class': 'w-full p-4 border border-slate-200 focus:outline-indigo-600'}),
-            'status': forms.Select(attrs={'class': 'w-full p-4 border border-slate-200'}),
-        }
+        fields = ['title', 'composer', 'arranged_by', 'part_of_mass', 'season', 'status', 'mto', 'mto_number', 'youtube_link']
+        
+    def __init__(self, *args, **kwargs):
+        super(SongForm, self).__init__(*args, **kwargs)
+        
+        # Define which fields should be optional
+        optional_fields = ['arranged_by', 'mto_number', 'youtube_link', 'composer']
+        
+        for field in optional_fields:
+            if field in self.fields:
+                self.fields[field].required = False
+
+        # Keep your professional styling here
+        self.fields['title'].widget.attrs.update({
+            'class': 'w-full px-0 py-4 font-medium text-2xl bg-transparent border-0 border-b-2 border-slate-200 rounded-none focus:border-indigo-600 outline-none transition-all text-slate-900',
+            'placeholder': 'Enter manuscript title...'
+        })
+        
+        self.fields['composer'].widget.attrs.update({
+            'class': 'w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-indigo-500 outline-none transition-all text-sm'
+        })
+
+        self.fields['arranged_by'].widget.attrs.update({
+            'class': 'w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-indigo-500 outline-none transition-all text-sm'
+        })
+        
+        self.fields['youtube_link'].widget.attrs.update({
+            'class': 'w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-indigo-500 outline-none transition-all text-sm font-mono',
+            'placeholder': 'https://youtube.com/...'
+        })
+
+        self.fields['mto_number'].widget.attrs.update({
+            'class': 'w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-indigo-500 outline-none transition-all text-sm'
+        })
+
+        # Apply basic rounded-xl styles to selectors
+        select_classes = 'w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none transition-all'
+        self.fields['season'].widget.attrs.update({'class': select_classes})
+        self.fields['part_of_mass'].widget.attrs.update({'class': select_classes})
+        self.fields['status'].widget.attrs.update({'class': select_classes + ' font-bold text-indigo-600'})
+        self.fields['mto'].widget.attrs.update({'class': 'w-5 h-5 accent-indigo-600 rounded'})
+
 
 # Inline formsets allow managing related files on the same page as the Song
 SheetFormSet = inlineformset_factory(Song, MusicSheet, fields=['music_sheet', 'ms_version'], extra=1, can_delete=True)

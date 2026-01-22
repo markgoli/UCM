@@ -13,4 +13,5 @@ urlpatterns = [
     # admin 
     path('scores-catalog/vlists/', AdminArrivalsView.as_view(), name='admin_arrivals'),
     path('music-scores/<slug:slug>/update/', AdminSongUpdateView.as_view(), name='admin_song_detail'),
+    path('admin/delete-asset/<str:asset_type>/<int:asset_id>/', delete_asset, name='delete_asset')
 ]

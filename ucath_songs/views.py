@@ -6,7 +6,8 @@ from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.db.models import Q
 from django.contrib import messages
-from .models import Song, MusicSheet, MidiFile, Mp3File
+from django.shortcuts import redirect, get_object_or_404
+from .models import *
 from .forms import *
 
 
@@ -17,7 +18,6 @@ class LandingView(TemplateView):
         context['mass_parts'] = Song.mass_parts
         
         return context
-
 
 class SongLibraryListView(ListView):
     model = Song
@@ -54,7 +54,6 @@ class SongLibraryListView(ListView):
         context['season_choices'] = Song.season_choices
         context['mass_parts'] = Song.mass_parts
         return context
-
 
 
 class SongCreateView(CreateView):
@@ -124,8 +123,6 @@ class SongCreateView(CreateView):
         return context
 
 
-
-
 class SongDetailView(DetailView):
     model = Song
     template_name = 'song_detail.html'
@@ -179,8 +176,6 @@ class SongDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         messages.success(request, f"Manuscript '{song.title}' has been permanently purged from the registry.")
         return super().delete(request, *args, **kwargs)
 
-
-# ============ AUTHENTICATION VIEWS ============
 class UserLoginView(LoginView):
     """User login view"""
     template_name = 'd-board.html'
@@ -238,7 +233,6 @@ class UserProfileView(LoginRequiredMixin, ListView):
         return Song.objects.all().order_by('-created_at')
 
 
-
 class AdminArrivalsView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Song
     template_name = 'admin/admin_new_arrival.html'
@@ -248,8 +242,31 @@ class AdminArrivalsView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return self.request.user.is_staff
 
     def get_queryset(self):
-        # Admins see everything, but we prioritize 'draft' status
-        return Song.objects.all().order_by('status', '-created_at')
+        query = self.request.GET.get('q')
+        # Admins see all, but filtered by search if present
+        queryset = Song.objects.all().order_by('status', '-created_at')
+        
+        if query:
+            queryset = queryset.filter(
+                Q(title__icontains=query) | 
+                Q(composer__icontains=query)
+            )
+        return queryset
+
+    def render_to_response(self, context, **response_kwargs):
+        # If HTMX request, only render the grid part
+        if self.request.headers.get('HX-Request'):
+            # We use the same template but tell Django to only render the grid div
+            # Or better yet, return a separate small template for the grid
+            return self.render_to_response_partial(context)
+        return super().render_to_response(context, **response_kwargs)
+
+    def render_to_response_partial(self, context):
+        # This renders just the grid part for HTMX
+        # You can also use a small partial template like 'admin/partials/song_grid.html'
+        self.template_name = 'admin/partials/song_grid.html' 
+        return super().render_to_response(context)
+
 
 class AdminSongUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Song
@@ -261,40 +278,55 @@ class AdminSongUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
+        # We fetch the actual related objects so the template can display them easily
+        data['saved_sheets'] = self.object.musicsheet_set.all()
+        data['saved_audios'] = self.object.mp3file_set.all()
+        data['saved_midis'] = self.object.midifile_set.all()
+        
         if self.request.POST:
-            data['sheets'] = SheetFormSet(self.request.POST, self.request.FILES, instance=self.object)
-            data['audios'] = Mp3FormSet(self.request.POST, self.request.FILES, instance=self.object)
-            data['midis'] = MidiFormSet(self.request.POST, self.request.FILES, instance=self.object)
+            data['sheet_formset'] = SheetFormSet(self.request.POST, self.request.FILES, instance=self.object, prefix='sheet')
+            data['audio_formset'] = Mp3FormSet(self.request.POST, self.request.FILES, instance=self.object, prefix='audio')
+            data['midi_formset'] = MidiFormSet(self.request.POST, self.request.FILES, instance=self.object, prefix='midi')
         else:
-            data['sheets'] = SheetFormSet(instance=self.object)
-            data['audios'] = Mp3FormSet(instance=self.object)
-            data['midis'] = MidiFormSet(instance=self.object)
+            data['sheet_formset'] = SheetFormSet(instance=self.object, prefix='sheet')
+            data['audio_formset'] = Mp3FormSet(instance=self.object, prefix='audio')
+            data['midi_formset'] = MidiFormSet(instance=self.object, prefix='midi')
         return data
 
     def form_valid(self, form):
         context = self.get_context_data()
-        sheets = context['sheets']
-        audios = context['audios']
-        midis = context['midis']
+        sheet_fs = context['sheet_formset']
+        audio_fs = context['audio_formset']
+        midi_fs = context['midi_formset']
         
-        if sheets.is_valid() and audios.is_valid() and midis.is_valid():
-            form.save()
-            sheets.instance = self.object
-            sheets.save()
-            audios.instance = self.object
-            audios.save()
-            midis.instance = self.object
-            midis.save()
+        if sheet_fs.is_valid() and audio_fs.is_valid() and midi_fs.is_valid():
+            self.object = form.save()
+            sheet_fs.save()
+            audio_fs.save()
+            midi_fs.save()
+            messages.success(self.request, f"Changes to '{self.object.title}' saved successfully.")
             return redirect('admin_arrivals')
         else:
+            messages.error(self.request, "Please correct the errors in the forms.")
             return self.render_to_response(self.get_context_data(form=form))
 
-class SongDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    model = Song
-    success_url = reverse_lazy('admin_arrivals')
+# Add a specific delete view for assets to handle the trash icons
+def delete_asset(request, asset_type, asset_id):
+    if not request.user.is_staff:
+        return redirect('login')
     
-    def test_func(self):
-        return self.request.user.is_staff
+    if asset_type == 'sheet':
+        asset = get_object_or_404(MusicSheet, id=asset_id)
+    elif asset_type == 'audio':
+        asset = get_object_or_404(Mp3File, id=asset_id)
+    elif asset_type == 'midi':
+        asset = get_object_or_404(MidiFile, id=asset_id)
+        
+    song_slug = asset.song.slug
+    asset.delete()
+    messages.info(request, "Asset removed from manuscript.")
+    return redirect('admin_song_detail', slug=song_slug)
+
 
 
 

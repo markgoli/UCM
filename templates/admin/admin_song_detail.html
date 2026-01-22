@@ -1,75 +1,241 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Manuscript Details - UCM{% endblock %}
-
 {% block content %}
-
 <section class="bg-[#fcfcfb] min-h-screen">
-    <div class="grid grid-cols-1 lg:grid-cols-12">
-        
-        <div class="lg:col-span-4 p-12 bg-white border-r border-slate-100 min-h-screen">
-            <a href="{% url 'admin_arrivals' %}" class="text-[10px] uppercase font-black text-slate-400 hover:text-slate-900 flex items-center gap-2 mb-12 transition">
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"></path></svg> Back to Queue
+    <div class="flex flex-col lg:flex-row min-h-screen">
+        <div class="w-full lg:w-[450px] bg-white border-r border-slate-200 p-8 lg:p-12 overflow-y-auto h-screen sticky top-0">
+            <a href="{% url 'admin_arrivals' %}" class="inline-flex items-center gap-2 text-[10px] uppercase font-black text-slate-400 hover:text-indigo-600 mb-12 transition group">
+                <svg class="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-width="2.5"></path></svg> 
+                Registry Ledger
             </a>
 
-            <form method="POST" class="space-y-8">
-                {% csrf_token %}
-                <h2 class="serif text-3xl text-slate-900 mb-8">Edit Manuscript</h2>
-                
-                {{ form.as_p }}
+            <header class="mb-10">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="w-2 h-2 rounded-full {% if song.status == 'published' %}bg-emerald-500{% else %}bg-amber-500{% endif %}"></span>
+                    <span class="text-[9px] uppercase tracking-widest font-bold text-slate-400">Current Status: {{ song.get_status_display }}</span>
+                </div>
+                <h1 class="serif text-4xl text-slate-900 leading-tight">{{ song.title }}</h1>
+            </header>
 
-                <div class="pt-8 border-t border-slate-100 flex gap-4">
-                    <button type="submit" name="status" value="published" class="flex-1 bg-green-600 text-white py-4 text-[10px] font-black uppercase tracking-widest hover:bg-green-700 transition">
-                        Approve & Publish
-                    </button>
-                    <button type="submit" name="status" value="draft" class="flex-1 bg-slate-900 text-white py-4 text-[10px] font-black uppercase tracking-widest hover:bg-slate-700 transition">
-                        Save as Draft
+            <form method="POST" enctype="multipart/form-data" class="space-y-8">
+                {% csrf_token %}
+                
+                {{ sheet_formset.management_form }}
+                {{ audio_formset.management_form }}
+                {{ midi_formset.management_form }}
+
+                <div class="hidden">
+                    {{ sheet_formset.0.music_sheet }}
+                    {{ sheet_formset.0.ms_version }} 
+                
+                    {{ audio_formset.0.mp3_file }}
+                    {{ audio_formset.0.ms_version }}
+                
+                    {{ midi_formset.0.midi_file }}
+                    {{ midi_formset.0.midi_version }}
+                </div>
+            
+                <div class="space-y-1">
+                    <label class="text-[10px] uppercase tracking-[0.2em] font-black text-slate-400">Title of Composition</label>
+                    {{ form.title }}
+                </div>
+            
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-[10px] uppercase tracking-widest font-black text-slate-400">Composer</label>
+                        {{ form.composer }}
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] uppercase tracking-widest font-black text-slate-400">Arranger</label>
+                        {{ form.arranged_by }}
+                    </div>
+                </div>
+            
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-[10px] uppercase tracking-widest font-black text-slate-400">Season</label>
+                        {{ form.season }}
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] uppercase tracking-widest font-black text-slate-400">Mass Part</label>
+                        {{ form.part_of_mass }}
+                    </div>
+                </div>
+            
+                <div class="p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100/50 space-y-4">
+                    <div class="flex items-center gap-3">
+                        {{ form.mto }}
+                        <label class="text-[10px] uppercase tracking-widest font-black text-indigo-900">Include in MTO Registry</label>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] uppercase tracking-widest font-black text-indigo-400">MTO Reference Number</label>
+                        {{ form.mto_number }}
+                    </div>
+                </div>
+            
+                <div class="space-y-1">
+                    <label class="text-[10px] uppercase tracking-widest font-black text-slate-400">YouTube Performance Link</label>
+                    {{ form.youtube_link }}
+                </div>
+            
+                <div class="space-y-1 pt-4 border-t border-slate-100">
+                    <label class="text-[10px] uppercase tracking-widest font-black text-slate-400">Registry Status</label>
+                    {{ form.status }}
+                </div>
+            
+                <div class="pt-6">
+                    <button type="submit" class="w-full bg-slate-900 text-white py-5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-indigo-600 transition-all shadow-xl shadow-slate-200">
+                        Update & Sync Archive
                     </button>
                 </div>
             </form>
         </div>
 
-        <div class="lg:col-span-8 p-12 space-y-12">
+        <div class="flex-1 p-8 lg:p-16 space-y-16">
             
-            <div class="bg-white p-8 border border-slate-100 shadow-sm">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-[12px] uppercase tracking-[0.3em] font-black text-slate-900">1. Music Sheets (PDF)</h3>
-                    <button onclick="openUploadModal('sheet')" class="text-indigo-600 text-[10px] font-bold uppercase">+ Add New Folio</button>
+            <div class="space-y-6">
+                <div class="flex justify-between items-end border-b border-slate-200 pb-4">
+                    <h3 class="serif text-2xl text-slate-900">Folio Manuscripts (PDF)</h3>
+                    <button type="button" 
+                        onclick="document.getElementById('id_sheet-0-music_sheet').click()" 
+                        class="bg-indigo-50 text-indigo-600 px-4 py-2 rounded-lg text-[10px] font-black uppercase hover:bg-indigo-600 hover:text-white transition">
+                        <span id="sheet-label">+ New Folio</span>
+                    </button>
                 </div>
-                <div class="grid grid-cols-3 gap-4">
-                    {% for sheet in sheets %}
-                    <div class="relative group aspect-[3/4] bg-slate-50 border border-slate-100 overflow-hidden">
+
+                <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {% for sheet in saved_sheets %}
+                    <div class="group relative aspect-[3/4] bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
                         <img src="{{ sheet.thumbnail.url }}" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-slate-900/80 opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center p-4">
-                            <span class="text-white text-[10px] font-bold mb-4">{{ sheet.ms_version }}</span>
-                            <button class="text-red-400 text-[9px] uppercase font-black hover:text-white transition">Remove</button>
+                        
+                        <div class="absolute inset-0 bg-slate-950/70 opacity-0 group-hover:opacity-100 transition-all flex flex-col items-center justify-center p-4 text-center">
+                            <button onclick="openSheetModal('{{ sheet.music_sheet.url }}')" class="w-12 h-12 rounded-full bg-white text-slate-900 flex items-center justify-center mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="2"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-width="2"/></svg>
+                            </button>
+                            <span class="text-white text-[10px] font-black uppercase tracking-widest mb-4">{{ sheet.ms_version }}</span>
+                            <a href="{% url 'delete_asset' 'sheet' sheet.id %}" onclick="return confirm('Delete this sheet?')" class="text-red-400 text-[9px] font-bold uppercase hover:text-white">Remove Asset</a>
                         </div>
                     </div>
                     {% endfor %}
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-white p-8 border border-slate-100">
-                    <h3 class="text-[12px] uppercase tracking-[0.3em] font-black text-slate-900 mb-6">2. Audio Versions (MP3)</h3>
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-12">
+                
+                <div class="space-y-6">
+                    <div class="flex justify-between items-end border-b border-slate-200 pb-4">
+                        <h3 class="serif text-xl text-slate-900">Audio Versions</h3>
+                        <button type="button" 
+                            onclick="document.getElementById('id_audio-0-mp3_file').click()" 
+                            class="text-indigo-600 text-[9px] font-black uppercase">
+                            <span id="audio-label">+ Upload MP3</span>
+                        </button>
+                    </div>
                     <div class="space-y-3">
-                        {% for audio in audios %}
-                        <div class="flex items-center justify-between p-3 bg-slate-50 border border-slate-100">
-                            <span class="text-[10px] font-bold text-slate-600">{{ audio.ms_version }}</span>
-                            <button class="text-slate-300 hover:text-red-600 transition"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                        {% for audio in saved_audios %}
+                        <div class="flex items-center gap-4 p-4 bg-white border border-slate-200 rounded-xl">
+                            <button onclick="playAudio('{{ audio.mp3_file.url }}', this)" class="w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center hover:bg-indigo-600 transition shadow-lg">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </button>
+                            <div class="flex-1">
+                                <p class="text-[11px] font-black text-slate-900 uppercase tracking-tight">{{ audio.ms_version }}</p>
+                                <p class="text-[9px] text-slate-400 uppercase">MP3 Audio File</p>
+                            </div>
+                            <a href="{% url 'delete_asset' 'audio' audio.id %}" onclick="return confirm('Delete audio?')" class="text-slate-300 hover:text-red-500 transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-width="2"/></svg>
+                            </a>
                         </div>
                         {% endfor %}
-                        <button class="w-full py-4 border-2 border-dashed border-slate-200 text-[10px] uppercase font-black text-slate-400 hover:border-slate-400 hover:text-slate-600 transition">+ Upload MP3</button>
                     </div>
                 </div>
-                
-                <div class="bg-white p-8 border border-slate-100">
-                    <h3 class="text-[12px] uppercase tracking-[0.3em] font-black text-slate-900 mb-6">3. Midi Files</h3>
+
+                <div class="space-y-6">
+                    <div class="flex justify-between items-end border-b border-slate-200 pb-4">
+                        <h3 class="serif text-xl text-slate-900">Midi Logic</h3>
+                        <button type="button" 
+                            onclick="document.getElementById('id_midi-0-midi_file').click()" 
+                            class="text-indigo-600 text-[9px] font-black uppercase">
+                            <span id="midi-label">+ Upload Midi</span>
+                        </button>
                     </div>
+                    <div class="space-y-3">
+                        {% for midi in saved_midis %}
+                        <div class="flex items-center gap-4 p-4 bg-white border border-slate-200 rounded-xl">
+                            <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" stroke-width="2"/></svg>
+                            </div>
+                            <div class="flex-1 text-[11px] font-black text-slate-900 uppercase">{{ midi.midi_version }}</div>
+                            <a href="{% url 'delete_asset' 'midi' midi.id %}" onclick="return confirm('Delete midi?')" class="text-slate-300 hover:text-red-500 transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-width="2"/></svg>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
+<div id="sheetModal" class="fixed inset-0 bg-slate-950/90 hidden z-[100] flex items-center justify-center p-6 backdrop-blur-sm">
+    <div class="relative w-full max-w-5xl h-[90vh] bg-white rounded-2xl overflow-hidden shadow-2xl">
+        <button onclick="closeSheetModal()" class="absolute top-4 right-4 z-10 w-10 h-10 bg-slate-900 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2.5"/></svg>
+        </button>
+        <iframe id="sheetFrame" src="" class="w-full h-full border-none"></iframe>
+    </div>
+</div>
+
+<script>
+    let currentAudio = null;
+    function playAudio(url, btn) {
+        if (currentAudio && !currentAudio.paused) {
+            currentAudio.pause();
+            btn.innerHTML = '<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+            if (currentAudio.src.includes(url)) return; 
+        }
+        currentAudio = new Audio(url);
+        currentAudio.play();
+        btn.innerHTML = '<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+    }
+
+    function openSheetModal(url) {
+        document.getElementById('sheetFrame').src = url;
+        document.getElementById('sheetModal').classList.remove('hidden');
+    }
+
+    function closeSheetModal() {
+        document.getElementById('sheetModal').classList.add('hidden');
+        document.getElementById('sheetFrame').src = '';
+    }
+
+    // Function to handle visual feedback when a file is selected
+    function handleFileSelect(inputId, labelId, versionId, defaultName) {
+        const fileInput = document.getElementById(inputId);
+        const label = document.getElementById(labelId);
+        const versionInput = document.getElementById(versionId);
+
+        fileInput.onchange = function() {
+            if (this.files && this.files.length > 0) {
+                const fileName = this.files[0].name;
+                label.innerText = `READY: ${fileName.substring(0, 15)}...`;
+                label.parentElement.classList.replace('bg-indigo-50', 'bg-emerald-500');
+                label.parentElement.classList.replace('text-indigo-600', 'text-white');
+                
+                // Auto-fill version if empty
+                if (!versionInput.value) {
+                    versionInput.value = defaultName;
+                }
+            }
+        };
+    }
+
+    // Initialize the triggers
+    document.addEventListener('DOMContentLoaded', function() {
+        handleFileSelect('id_sheet-0-music_sheet', 'sheet-label', 'id_sheet-0-ms_version', 'Standard Folio');
+        handleFileSelect('id_audio-0-mp3_file', 'audio-label', 'id_audio-0-ms_version', 'Master Recording');
+        handleFileSelect('id_midi-0-midi_file', 'midi-label', 'id_midi-0-midi_version', 'Synthesized Logic');
+    });
+</script>
 {% endblock %}
