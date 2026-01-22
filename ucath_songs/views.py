@@ -1,9 +1,10 @@
+from calendar import c
 from django.views.generic import TemplateView, View, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
-from django.shortcuts import redirect
+from django.shortcuts import redirect, reverse
 from django.db.models import Q
 from django.contrib import messages
 from django.shortcuts import redirect, get_object_or_404
@@ -267,7 +268,6 @@ class AdminArrivalsView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         self.template_name = 'admin/partials/song_grid.html' 
         return super().render_to_response(context)
 
-
 class AdminSongUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Song
     form_class = SongForm
@@ -278,37 +278,17 @@ class AdminSongUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        # We fetch the actual related objects so the template can display them easily
+        # Fetch actual related objects for display in the right panel
         data['saved_sheets'] = self.object.musicsheet_set.all()
         data['saved_audios'] = self.object.mp3file_set.all()
         data['saved_midis'] = self.object.midifile_set.all()
-        
-        if self.request.POST:
-            data['sheet_formset'] = SheetFormSet(self.request.POST, self.request.FILES, instance=self.object, prefix='sheet')
-            data['audio_formset'] = Mp3FormSet(self.request.POST, self.request.FILES, instance=self.object, prefix='audio')
-            data['midi_formset'] = MidiFormSet(self.request.POST, self.request.FILES, instance=self.object, prefix='midi')
-        else:
-            data['sheet_formset'] = SheetFormSet(instance=self.object, prefix='sheet')
-            data['audio_formset'] = Mp3FormSet(instance=self.object, prefix='audio')
-            data['midi_formset'] = MidiFormSet(instance=self.object, prefix='midi')
         return data
 
     def form_valid(self, form):
-        context = self.get_context_data()
-        sheet_fs = context['sheet_formset']
-        audio_fs = context['audio_formset']
-        midi_fs = context['midi_formset']
-        
-        if sheet_fs.is_valid() and audio_fs.is_valid() and midi_fs.is_valid():
-            self.object = form.save()
-            sheet_fs.save()
-            audio_fs.save()
-            midi_fs.save()
-            messages.success(self.request, f"Changes to '{self.object.title}' saved successfully.")
-            return redirect('admin_arrivals')
-        else:
-            messages.error(self.request, "Please correct the errors in the forms.")
-            return self.render_to_response(self.get_context_data(form=form))
+        self.object = form.save()
+        messages.success(self.request, f"Manuscript '{self.object.title}' updated successfully.")
+        return redirect('admin_song_detail', slug=self.object.slug)
+
 
 # Add a specific delete view for assets to handle the trash icons
 def delete_asset(request, asset_type, asset_id):
@@ -327,6 +307,47 @@ def delete_asset(request, asset_type, asset_id):
     messages.info(request, "Asset removed from manuscript.")
     return redirect('admin_song_detail', slug=song_slug)
 
+
+class AssetUploadBaseView(LoginRequiredMixin, UserPassesTestMixin, View):
+    """Base logic for staff-only asset uploads"""
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def get_success_url(self, slug):
+        return reverse('admin_song_detail', kwargs={'slug': slug})
+
+class UploadSheetView(AssetUploadBaseView):
+    def post(self, request, slug):
+        song = get_object_or_404(Song, slug=slug)
+        file = request.FILES.get('file')
+        version = request.POST.get('ms_version', 'Standard Folio')
+        
+        if file:
+            MusicSheet.objects.create(song=song, music_sheet=file, ms_version=version)
+            messages.success(request, "Folio manuscript added.")
+        return redirect(self.get_success_url(slug))
+
+class UploadAudioView(AssetUploadBaseView):
+    def post(self, request, slug):
+        song = get_object_or_404(Song, slug=slug)
+        file = request.FILES.get('file')
+        version = request.POST.get('mp3_version', 'Master Recording')
+        
+        if file:
+            Mp3File.objects.create(song=song, mp3_file=file, mp3_version=version)
+            messages.success(request, "Audio asset synced.")
+        return redirect(self.get_success_url(slug))
+
+class UploadMidiView(AssetUploadBaseView):
+    def post(self, request, slug):
+        song = get_object_or_404(Song, slug=slug)
+        file = request.FILES.get('file')
+        version = request.POST.get('midi_version', 'Synthesized Logic')
+        
+        if file:
+            MidiFile.objects.create(song=song, midi_file=file, midi_version=version)
+            messages.success(request, "Midi sequence added.")
+        return redirect(self.get_success_url(slug))
 
 
 

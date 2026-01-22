@@ -13,5 +13,8 @@ urlpatterns = [
     # admin 
     path('scores-catalog/vlists/', AdminArrivalsView.as_view(), name='admin_arrivals'),
     path('music-scores/<slug:slug>/update/', AdminSongUpdateView.as_view(), name='admin_song_detail'),
-    path('admin/delete-asset/<str:asset_type>/<int:asset_id>/', delete_asset, name='delete_asset')
+    path('music-scores/delete-asset/<str:asset_type>/<int:asset_id>/', delete_asset, name='delete_asset'),
+    path('music-scores/song/<slug:slug>/upload-sheet/', UploadSheetView.as_view(), name='upload_sheet'),
+    path('music-scores/song/<slug:slug>/upload-audio/', UploadAudioView.as_view(), name='upload_audio'),
+    path('music-scores/song/<slug:slug>/upload-midi/', UploadMidiView.as_view(), name='upload_midi'),
 ]
