@@ -8,8 +8,10 @@ urlpatterns = [
     path('music-scores/upload/', SongCreateView.as_view(), name='upload_song'),
     path('music-scores/<slug:slug>/edit/', SongUpdateView.as_view(), name='song_edit'),
     path('music-scores/<slug:slug>/delete/', SongDeleteView.as_view(), name='song_delete'),
-    path('login/', UserLoginView.as_view(), name='login'),
+    path('accounts/login/', UserLoginView.as_view(), name='login'),
     path('logout/', UserLogoutView.as_view(), name='logout'),
+    path('archive/links/', SongIndexListView.as_view(), name='song_links'),
+    path('archive/download/<int:sheet_id>/', download_sheet, name='download_sheet'),
     # admin 
     path('scores-catalog/vlists/', AdminArrivalsView.as_view(), name='admin_arrivals'),
     path('music-scores/<slug:slug>/update/', AdminSongUpdateView.as_view(), name='admin_song_detail'),

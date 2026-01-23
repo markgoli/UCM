@@ -3,8 +3,9 @@
 
 {% block content %}
 <section class="bg-[#fcfcfb] min-h-screen">
-    <div class="flex flex-col lg:flex-row min-h-screen">
-        <div class="w-full lg:w-[450px] bg-white border-r border-slate-200 p-8 lg:p-12 overflow-y-auto h-screen sticky top-0">
+    <div class="flex flex-col lg:flex-row min-h-screen overflow-x-hidden">
+        
+        <div class="w-full lg:w-[450px] lg:min-w-[450px] bg-white border-b lg:border-b-0 lg:border-r border-slate-200 p-8 lg:p-12 lg:overflow-y-auto lg:h-screen lg:sticky lg:top-0">
             <a href="{% url 'admin_arrivals' %}" class="inline-flex items-center gap-2 text-[10px] uppercase font-black text-slate-400 hover:text-indigo-600 mb-12 transition group">
                 <svg class="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-width="2.5"></path></svg> 
                 Registry Ledger
@@ -78,8 +79,7 @@
             </form>
         </div>
 
-        <div class="flex-1 p-8 lg:p-16 space-y-16">
-            
+        <div class="flex-1 p-6 md:p-8 lg:p-16 space-y-16 overflow-x-hidden">
             <div class="space-y-6">
                 <div class="flex justify-between items-end border-b border-slate-200 pb-4">
                     <h3 class="serif text-2xl text-slate-900">Folio Manuscripts (PDF)</h3>
@@ -87,16 +87,16 @@
                         + New Folio
                     </button>
                 </div>
-
-                <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+            
+                <div class="flex flex-nowrap gap-6 overflow-x-auto pb-6 pt-2 snap-x scrollbar-hide">
                     {% for sheet in saved_sheets %}
-                    <div class="group relative aspect-[3/4] bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+                    <div class="flex-none w-[220px] md:w-[260px] group relative aspect-[3/4] bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm snap-start">
                         <img src="{{ sheet.thumbnail.url }}" class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-slate-950/70 opacity-0 group-hover:opacity-100 transition-all flex flex-col items-center justify-center p-4 text-center">
                             <button onclick="openSheetModal('{{ sheet.music_sheet.url }}')" class="w-12 h-12 rounded-full bg-white text-slate-900 flex items-center justify-center mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="2"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-width="2"/></svg>
                             </button>
-                            <span class="text-white text-[10px] font-black uppercase tracking-widest mb-4">{{ sheet.ms_version }}</span>
+                            <span class="text-white text-[10px] font-black uppercase tracking-widest mb-4 truncate w-full px-2">{{ sheet.ms_version }}</span>
                             <a href="{% url 'delete_asset' 'sheet' sheet.id %}" onclick="return confirm('Delete this sheet?')" class="text-red-400 text-[9px] font-bold uppercase hover:text-white">Remove Asset</a>
                         </div>
                     </div>
@@ -114,12 +114,12 @@
                     </div>
                     <div class="space-y-3">
                         {% for audio in saved_audios %}
-                        <div class="flex items-center gap-4 p-4 bg-white border border-slate-200 rounded-xl">
-                            <button onclick="playAudio('{{ audio.mp3_file.url }}', this)" class="w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center hover:bg-indigo-600 transition shadow-lg">
+                        <div class="flex items-center gap-4 p-4 bg-white border border-slate-200 rounded-xl overflow-hidden">
+                            <button onclick="playAudio('{{ audio.mp3_file.url }}', this)" class="w-10 h-10 min-w-[40px] rounded-full bg-slate-900 text-white flex items-center justify-center hover:bg-indigo-600 transition shadow-lg">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             </button>
-                            <div class="flex-1">
-                                <p class="text-[11px] font-black text-slate-900 uppercase tracking-tight">{{ audio.ms_version }}</p>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-[11px] font-black text-slate-900 uppercase tracking-tight truncate">{{ audio.ms_version }}</p>
                                 <p class="text-[9px] text-slate-400 uppercase">MP3 Audio File</p>
                             </div>
                             <a href="{% url 'delete_asset' 'audio' audio.id %}" onclick="return confirm('Delete audio?')" class="text-slate-300 hover:text-red-500 transition">
@@ -137,11 +137,11 @@
                     </div>
                     <div class="space-y-3">
                         {% for midi in saved_midis %}
-                        <div class="flex items-center gap-4 p-4 bg-white border border-slate-200 rounded-xl">
-                            <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                        <div class="flex items-center gap-4 p-4 bg-white border border-slate-200 rounded-xl overflow-hidden">
+                            <div class="w-10 h-10 min-w-[40px] rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" stroke-width="2"/></svg>
                             </div>
-                            <div class="flex-1 text-[11px] font-black text-slate-900 uppercase">{{ midi.midi_version }}</div>
+                            <div class="flex-1 min-w-0 text-[11px] font-black text-slate-900 uppercase truncate">{{ midi.midi_version }}</div>
                             <a href="{% url 'delete_asset' 'midi' midi.id %}" onclick="return confirm('Delete midi?')" class="text-slate-300 hover:text-red-500 transition">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-width="2"/></svg>
                             </a>
@@ -296,6 +296,14 @@
     function closeSheetModal() {
         document.getElementById('sheetModal').classList.add('hidden');
         document.getElementById('sheetFrame').src = '';
+    }
+
+    function updateFileName(input, targetId) {
+        const fileName = input.files[0] ? input.files[0].name : "No file chosen";
+        const label = document.getElementById(targetId);
+        label.innerText = fileName;
+        label.classList.remove('text-slate-400');
+        label.classList.add('text-indigo-600', 'font-bold');
     }
 
     // Close Modals on background click

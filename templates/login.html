@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In — Cantus UCM Archive</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root { font-size: 13px; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #0f172a; /* Deep slate background */
+            color: #0f172a;
+        }
+        .serif { font-family: 'Instrument Serif', serif; }
+        .letter-spacing-widest { letter-spacing: 0.3em; }
+    </style>
+</head>
+
+<body class="antialiased min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+    
+    <div class="absolute -top-24 -left-24 w-96 h-96 bg-indigo-500/10 rounded-full blur-[120px]"></div>
+    <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px]"></div>
+
+    <div class="relative w-full max-w-4xl bg-white shadow-2xl flex flex-col md:flex-row min-h-[550px] z-10">
+        
+        <div class="w-full md:w-[38%] bg-[#0f172a] p-12 flex flex-col justify-between text-white relative">
+            <div class="absolute top-0 right-0 opacity-[0.03] pointer-events-none transform translate-x-10 -translate-y-10">
+                <svg width="300" height="300" viewBox="0 0 24 24" fill="white">
+                    <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                </svg>
+            </div>
+
+            <div class="relative z-10">
+                <a href="" class="serif text-3xl italic block mb-6 hover:text-indigo-400 transition-colors">Cantus — UCM</a>
+                <div class="h-[2px] w-10 bg-indigo-500"></div>
+            </div>
+
+            <div class="relative z-10 space-y-6">
+                <div>
+                    <p class="text-[10px] uppercase tracking-[0.3em] font-extrabold text-slate-400 leading-relaxed mb-2">
+                        Registry Archive
+                    </p>
+                    <p class="text-[9px] text-slate-500 leading-loose uppercase tracking-widest">
+                        Access to the manuscript repository is restricted to authorized personnel and liturgy directors.
+                    </p>
+                </div>
+                <p class="text-[9px] text-indigo-400 font-black uppercase tracking-[0.4em]">Est. MMXXVI</p>
+            </div>
+        </div>
+
+        <div class="flex-1 p-5 md:p-20 bg-white">
+            
+            <div class="mb-5">
+                <h2 class="serif text-5xl text-slate-900 mb-4">Sign In</h2>
+                <p class="text-[10px] uppercase tracking-widest font-bold text-slate-400">Enter your credentials to manage the ledger</p>
+            </div>
+
+            {% if form.errors %}
+            <div class="mb-8 p-4 bg-red-50 border-l-2 border-red-500">
+                <p class="text-[10px] uppercase font-bold text-red-600 tracking-tight">Authentication failed. Please verify credentials.</p>
+            </div>
+            {% endif %}
+
+            <form method="POST" action="{% url 'login' %}" class="space-y-12">
+                {% csrf_token %}
+                
+                <input type="hidden" name="next" value="{{ next }}">
+
+                <div class="group border-b border-slate-200 focus-within:border-slate-950 transition-all py-2">
+                    <label for="username" class="block text-[9px] uppercase tracking-[0.2em] font-black text-slate-400 mb-2">Credential Identity</label>
+                    <input type="text" name="username" id="username" required
+                        class="w-full bg-transparent outline-none text-slate-900 text-base py-2 placeholder:text-slate-400 font-medium"
+                        placeholder="Username or Email">
+                </div>
+
+                <div class="group border-b border-slate-200 focus-within:border-slate-950 transition-all py-2">
+                    <div class="flex justify-between items-center mb-2">
+                        <label for="password" class="text-[9px] uppercase tracking-[0.2em] font-black text-slate-400">Secure Key</label>
+                        <a href="#" class="text-[9px] uppercase tracking-widest text-slate-500 hover:text-indigo-600 font-bold transition-colors">Forgotten?</a>
+                    </div>
+                    <input type="password" name="password" id="password" required
+                        class="w-full bg-transparent outline-none text-slate-900 text-base py-2 placeholder:text-slate-400 font-medium"
+                        placeholder="••••••••••••">
+                </div>
+
+                <div class="pt-0">
+                    <button type="submit" 
+                        class="w-full bg-slate-950 text-white text-[10px] uppercase tracking-[0.4em] font-black py-6 hover:bg-indigo-600 transition-all shadow-xl shadow-indigo-100 flex items-center justify-center gap-4">
+                        <span>Authenticate Access</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                    
+                    <div class="mt-8 flex justify-center">
+                        <a href="/" class="text-[9px] uppercase tracking-[0.2em] font-black text-slate-400 hover:text-slate-900 transition-colors">← Return to Public Archive</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

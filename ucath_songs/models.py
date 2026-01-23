@@ -18,7 +18,8 @@ class Song(models.Model):
         ('lent', 'Lent'),
         ('easter', 'Easter'),
         ('christmas', 'Christmas'), 
-        ('advent', 'Advent'), 
+        ('advent', 'Advent'),
+        ('passion', 'Passion For Christ'),
         ('ordinary', 'Ordinary Time'),
     ]
 

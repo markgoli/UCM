@@ -1,4 +1,3 @@
-from calendar import c
 from django.views.generic import TemplateView, View, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -8,6 +7,9 @@ from django.shortcuts import redirect, reverse
 from django.db.models import Q
 from django.contrib import messages
 from django.shortcuts import redirect, get_object_or_404
+from django.http import FileResponse, Http404
+from django.utils.text import slugify
+import os
 from .models import *
 from .forms import *
 
@@ -31,7 +33,7 @@ class SongLibraryListView(ListView):
         return ['songs_listing.html']
 
     def get_queryset(self):
-        queryset = Song.objects.filter(status='published').order_by("-created_at")
+        queryset = Song.objects.filter(status='pending_approval').order_by("-created_at")
         
         # Search
         q = self.request.GET.get('q')
@@ -179,7 +181,7 @@ class SongDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 class UserLoginView(LoginView):
     """User login view"""
-    template_name = 'd-board.html'
+    template_name = 'login.html'
     redirect_authenticated_user = True
     
     def get_success_url(self):
@@ -348,6 +350,34 @@ class UploadMidiView(AssetUploadBaseView):
             MidiFile.objects.create(song=song, midi_file=file, midi_version=version)
             messages.success(request, "Midi sequence added.")
         return redirect(self.get_success_url(slug))
+
+class SongIndexListView(ListView):
+    model = Song
+    template_name = 'song_links.html'
+    context_object_name = 'songs'
+    ordering = ['title']
+
+
+
+def download_sheet(request, sheet_id):
+    # Fetch the sheet object
+    sheet = get_object_or_404(MusicSheet, id=sheet_id)
+    
+    # Ensure the file actually exists on the server
+    if not sheet.music_sheet or not os.path.exists(sheet.music_sheet.path):
+        raise Http404("The requested manuscript file is missing from the archive.")
+
+    file_handle = open(sheet.music_sheet.path, 'rb')
+
+    safe_song_title = slugify(sheet.song.title)
+    safe_version = slugify(sheet.ms_version)
+    filename = f"{safe_song_title}_{safe_version}.pdf"
+
+    response = FileResponse(file_handle, content_type='application/pdf')
+    
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    
+    return response
 
 
 
