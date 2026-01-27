@@ -16,7 +16,7 @@
                     <span class="w-2 h-2 rounded-full {% if song.status == 'published' %}bg-emerald-500{% else %}bg-amber-500{% endif %}"></span>
                     <span class="text-[9px] uppercase tracking-widest font-bold text-slate-400">Current Status: {{ song.get_status_display }}</span>
                 </div>
-                <h1 class="serif text-4xl text-slate-900 leading-tight">{{ song.title }}</h1>
+                <h1 class="serif text-4xl text-slate-900 leading-tight">{{ song.title|lower|capfirst }}</h1>
             </header>
 
             <form method="POST" class="space-y-8">
@@ -115,8 +115,11 @@
                     <div class="space-y-3">
                         {% for audio in saved_audios %}
                         <div class="flex items-center gap-4 p-4 bg-white border border-slate-200 rounded-xl overflow-hidden">
-                            <button onclick="playAudio('{{ audio.mp3_file.url }}', this)" class="w-10 h-10 min-w-[40px] rounded-full bg-slate-900 text-white flex items-center justify-center hover:bg-indigo-600 transition shadow-lg">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            <button onclick="playAudio('{{ audio.mp3_file.url }}', this)" 
+                                    class="w-10 h-10 flex-shrink-0 rounded-full bg-slate-900 text-white flex items-center justify-center hover:bg-indigo-600 transition shadow-lg">
+                                <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
                             </button>
                             <div class="flex-1 min-w-0">
                                 <p class="text-[11px] font-black text-slate-900 uppercase tracking-tight truncate">{{ audio.ms_version }}</p>

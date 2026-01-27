@@ -9,7 +9,7 @@
                 {% with sheet=song.musicsheet_set.first %}
                     {% if sheet and sheet.thumbnail %}
                         <img src="{{ sheet.thumbnail.url }}" 
-                             alt="{{ song.title }}" 
+                             alt="{{ song.title|lower|capfirst }}" 
                              class="w-full h-full object-cover object-top scale-100 border-zinc-200 transition-all duration-500">
                     {% else %}
                         <div class="w-full h-full bg-slate-50 p-8 flex flex-col justify-center border-b border-slate-100">
@@ -59,7 +59,7 @@
 
         <div class="space-y-1">
             <p class="text-[9px] uppercase tracking-[0.2em] font-black text-indigo-600">{{ song.composer }}</p>
-            <h3 class="serif text-xl text-slate-900 leading-tight">{{ song.title }}</h3>
+            <h3 class="serif text-xl text-slate-900 leading-tight">{{ song.title|lower|capfirst }}</h3>
             <div class="pt-4 flex items-center justify-between text-slate-400">
                 <span class="text-[9px] uppercase tracking-widest font-bold">{{ song.get_part_of_mass_display }}</span>
                 <svg class="w-4 h-4 text-slate-900 opacity-20 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">

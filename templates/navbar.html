@@ -7,8 +7,9 @@
         </a>
         
         <div class="hidden lg:flex items-center gap-8 text-[11px] uppercase tracking-[0.2em] font-black text-slate-400">
+            <a href="{% url 'about' %}" class="hover:text-white transition">About us</a>
             <a href="{% url 'song_library' %}" class="hover:text-white transition">Score Library</a>
-            <a href="{% url 'song_links' %}" class="hover:text-white transition">Links</a>
+            <a href="{% url 'song_links' %}" class="hover:text-white transition">All Hymns</a>
             {% if request.user.is_authenticated %}
             <a href="{% url 'admin_arrivals' %}" class="hover:text-white transition text-indigo-400">Ledger Assets</a>
             {% endif %}
@@ -35,8 +36,8 @@
         </div>
 
         <a href="{% url 'upload_song' %}" class="hidden sm:block">
-            <button class="bg-white text-slate-900 px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-indigo-50 transition-all active:scale-95">
-                New Manuscript
+            <button class="bg-white text-slate-900 px-6 py-2.5 rounded-full text-[9px] font-black uppercase tracking-widest hover:bg-indigo-50 transition-all active:scale-95">
+                Upload New Score
             </button>
         </a>
 
@@ -59,23 +60,24 @@
     </div>
 
     <div class="flex flex-col gap-8 text-xl font-medium text-slate-400">
-        <a href="{% url 'song_library' %}" class="hover:text-white transition serif text-3xl">Score Library</a>
-        <a href="#" class="hover:text-white transition serif text-3xl">Links</a>
+        <a href="{% url 'about' %}" class="hover:text-white transition serif text-2xl">About Us</a>
+        <a href="{% url 'song_library' %}" class="hover:text-white transition serif text-2xl">Score Library</a>
+        <a href="{% url 'song_links' %}" class="hover:text-white transition serif text-2xl">All Hymns</a>
         {% if request.user.is_authenticated %}
-        <a href="{% url 'admin_arrivals' %}" class="hover:text-white transition serif text-3xl text-indigo-400">Digital Assets</a>
+        <a href="{% url 'admin_arrivals' %}" class="hover:text-white transition serif text-2xl text-indigo-400">Digital Assets</a>
         <div class="h-[1px] w-full bg-white/10 my-4"></div>
         <p class="text-[10px] uppercase tracking-[0.3em] font-black text-slate-500">Authorized Session</p>
-        <span class="text-white uppercase">User: {{ request.user.username }}</span>
+        <span class="text-white uppercase text-[10px]">User: {{ request.user.username }}</span>
         <form action="{% url 'logout' %}" method="post">
             {% csrf_token %}
-            <button type="submit" class="text-red-400 text-left font-bold serif text-3xl">Terminate Session</button>
+            <button type="submit" class="text-red-400 text-left font-bold serif text-2xl">Terminate Session</button>
         </form>
         {% else %}
         <button onclick="toggleModal()" class="text-slate-400 hover:text-white transition font-semibold">Sign In</button>
         {% endif %}
         
         <a href="{% url 'upload_song' %}" class="mt-8">
-            <button class="w-full bg-white text-slate-900 py-5 rounded-2xl font-black uppercase tracking-[0.2em] text-[10px]">
+            <button class="w-full bg-white text-slate-900 py-5 rounded-2xl font-black uppercase tracking-[0.2em] text-[9px]">
                 Upload New Score
             </button>
         </a>

@@ -39,6 +39,7 @@ class Song(models.Model):
         ('communion', 'Eucharist'),
         ('blessing', 'Blessing'),
         ('dismissal', 'Dismissal / Recession'),
+        ('baptism', 'Baptism'), 
         ('others', 'Others')
     ]
 
@@ -143,6 +144,7 @@ class MidiFile(models.Model):
     song = models.ForeignKey(Song, on_delete=models.CASCADE)
     midi_file = models.FileField(upload_to='midi_files/')
     midi_version = models.CharField(max_length=256, null=True, blank=True)
+    midi_link = models.CharField(max_length=300, null=True, blank=True)
 
     def __str__(self) -> str:  # pragma: no cover
         return f"MIDI File for {self.song} - {self.midi_version}"

@@ -117,6 +117,14 @@ class SongUploadForm(forms.ModelForm):
         required=False
     )
     
+    midi_link = forms.CharField(
+        max_length=256,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'MIDI file link (e.g., https://...)'
+        }),
+        required=False
+    )
     # MP3 File fields (optional)
     mp3_file = forms.FileField(
         widget=forms.FileInput(attrs={

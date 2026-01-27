@@ -22,6 +22,13 @@ class LandingView(TemplateView):
         
         return context
 
+
+class AboutUsView(TemplateView):
+    template_name = 'about.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
 class SongLibraryListView(ListView):
     model = Song
     context_object_name = 'songs'
@@ -33,7 +40,7 @@ class SongLibraryListView(ListView):
         return ['songs_listing.html']
 
     def get_queryset(self):
-        queryset = Song.objects.filter(status='pending_approval').order_by("-created_at")
+        queryset = Song.objects.filter(status='published').order_by("-created_at")
         
         # Search
         q = self.request.GET.get('q')
@@ -91,11 +98,13 @@ class SongCreateView(CreateView):
         # Handle MIDI File upload
         midi_file = form.cleaned_data.get('midi_file')
         midi_version = form.cleaned_data.get('midi_version')
-        if midi_file and midi_version:
+        midi_link = form.cleaned_data.get('midi_link')
+        if midi_file or midi_version or midi_link:
             MidiFile.objects.create(
                 song=song,
                 midi_file=midi_file,
-                midi_version=midi_version
+                midi_version=midi_version, 
+                midi_link=midi_link
             )
         
         # Handle MP3 File upload
