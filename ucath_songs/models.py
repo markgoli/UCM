@@ -64,6 +64,10 @@ class Song(models.Model):
     class Meta:
         ordering = ["created_at"]
 
+    @property
+    def prp_song_title(self):
+        return self.title.title()
+
 
     def generate_slug(self):
         """Generate a unique 16-character slug"""

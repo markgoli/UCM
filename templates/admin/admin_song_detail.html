@@ -16,7 +16,7 @@
                     <span class="w-2 h-2 rounded-full {% if song.status == 'published' %}bg-emerald-500{% else %}bg-amber-500{% endif %}"></span>
                     <span class="text-[9px] uppercase tracking-widest font-bold text-slate-400">Current Status: {{ song.get_status_display }}</span>
                 </div>
-                <h1 class="serif text-4xl text-slate-900 leading-tight">{{ song.title|lower|capfirst }}</h1>
+                <h1 class="serif text-4xl text-slate-900 leading-tight">{{ song.prp_song_title }}</h1>
             </header>
 
             <form method="POST" class="space-y-8">

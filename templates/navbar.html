@@ -3,10 +3,10 @@
 <nav class="flex items-center justify-between px-6 lg:px-16 py-5 bg-[#0f172a]/95 backdrop-blur-lg text-white sticky top-0 z-50 border-b border-white/10">
     <div class="flex items-center gap-12">
         <a href="{% url 'dashboard' %}" class="flex items-center gap-2">
-            <span class="serif text-3xl lg:text-4xl tracking-tight italic">Cantus</span>
+            <span class="serif text-2xl lg:text-3xl tracking-tight italic">Cantus</span>
         </a>
         
-        <div class="hidden lg:flex items-center gap-8 text-[11px] uppercase tracking-[0.2em] font-black text-slate-400">
+        <div class="hidden lg:flex items-center gap-8 text-[10px] uppercase tracking-[0.2em] font-black text-slate-400">
             <a href="{% url 'about' %}" class="hover:text-white transition">About us</a>
             <a href="{% url 'song_library' %}" class="hover:text-white transition">Score Library</a>
             <a href="{% url 'song_links' %}" class="hover:text-white transition">All Hymns</a>
@@ -51,7 +51,7 @@
 
 <div id="mobileMenu" class="fixed inset-0 bg-[#0f172a] z-[60] flex-col p-8 transition-all duration-300 transform translate-x-full hidden lg:hidden">
     <div class="flex justify-between items-center mb-16">
-        <span class="serif text-3xl italic text-white">Cantus</span>
+        <span class="serif text-2xl italic text-white">Cantus</span>
         <button onclick="toggleMobileMenu()" class="text-white p-2">
             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
