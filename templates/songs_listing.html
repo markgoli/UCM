@@ -45,37 +45,59 @@
 
     <div class="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16">
         
-        <aside class="lg:col-span-3 space-y-12">
+        <div class="lg:hidden">
+            <button onclick="toggleFilters()" 
+                    class="w-full py-4 bg-slate-900 text-white text-[10px] font-black uppercase tracking-[0.3em] flex items-center justify-center gap-3">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                </svg>
+                Filter Archive
+            </button>
+        </div>
+        
+        <aside id="filterSidebar" class="hidden lg:block lg:col-span-3 space-y-12 bg-[#fcfcfb] lg:bg-transparent p-6 lg:p-0 border lg:border-none border-slate-200 mb-8 lg:mb-0">
+    
             <form id="filterForm" hx-get="{% url 'song_library' %}" hx-target="#songGrid" hx-swap="outerHTML" hx-trigger="change" hx-push-url="true">
                 
                 <div class="flex items-center justify-between mb-8 border-b border-slate-400 pb-2">
-                    <h3 class="text-[11px] uppercase tracking-[0.3em] font-black text-slate-900">Filters</h3>
-                    <button type="button" 
-                        onclick="resetFilters()"
-                        class="text-[9px] uppercase tracking-widest font-bold text-indigo-600 hover:text-slate-900 transition-colors">
-                        Clear All
-                    </button>
+                    <h3 class="text-[10px] lg:text-[11px] uppercase tracking-[0.3em] font-black text-slate-900">Filters</h3>
+                    <div class="flex items-center gap-4">
+                        <button type="button" 
+                            onclick="resetFilters()"
+                            class="text-[8px] lg:text-[9px] uppercase tracking-widest font-bold text-indigo-600 hover:text-slate-900 transition-colors">
+                            Clear All
+                        </button>
+                        <button type="button" onclick="toggleFilters()" class="lg:hidden text-slate-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2"/></svg>
+                        </button>
+                    </div>
                 </div>
-
+        
                 <div class="mb-10">
-                    <h4 class="text-[9px] uppercase tracking-[0.2em] font-black text-slate-500 mb-6">Liturgical Season</h4>
-                    <div class="space-y-3">
+                    <h4 class="text-[8px] lg:text-[9px] uppercase tracking-[0.2em] font-black text-slate-500 mb-6">Liturgical Season</h4>
+                    <div class="grid grid-cols-2 lg:grid-cols-1 gap-x-4 gap-y-3">
                         {% for value, label in season_choices %}
-                        <label class="flex items-center gap-3 cursor-pointer group">
-                            <input type="checkbox" name="season" value="{{ value }}" class="filter-checkbox w-4 h-4 border-slate-200 rounded-none transition-all">
-                            <span class="text-[11px] uppercase tracking-widest text-slate-700 group-hover:text-slate-900">{{ label }}</span>
+                        <label class="flex items-center gap-2 lg:gap-3 cursor-pointer group">
+                            <input type="checkbox" name="season" value="{{ value }}" 
+                                class="filter-checkbox w-3.5 h-3.5 lg:w-4 lg:h-4 border-slate-200 rounded-none checked:bg-indigo-600 transition-all">
+                            <span class="text-[10px] lg:text-[11px] uppercase tracking-widest text-slate-700 group-hover:text-slate-900 leading-none">
+                                {{ label }}
+                            </span>
                         </label>
                         {% endfor %}
                     </div>
                 </div>
-
+        
                 <div>
-                    <h4 class="text-[9px] uppercase tracking-[0.2em] font-black text-slate-400 mb-6">Part of Mass</h4>
-                    <div class="space-y-3 max-h-80 overflow-y-auto pr-4 custom-scrollbar">
+                    <h4 class="text-[8px] lg:text-[9px] uppercase tracking-[0.2em] font-black text-slate-400 mb-6">Part of Mass</h4>
+                    <div class="max-h-80 overflow-y-auto pr-4 custom-scrollbar grid grid-cols-2 lg:grid-cols-1 gap-x-4 gap-y-3">
                         {% for value, label in mass_parts %}
-                        <label class="flex items-center gap-3 cursor-pointer group">
-                            <input type="checkbox" name="part" value="{{ value }}" class="filter-checkbox w-4 h-4 border-slate-200 rounded-none transition-all">
-                            <span class="text-[11px] uppercase tracking-widest text-slate-500 group-hover:text-slate-900">{{ label }}</span>
+                        <label class="flex items-center gap-2 lg:gap-3 cursor-pointer group">
+                            <input type="checkbox" name="part" value="{{ value }}" 
+                                class="filter-checkbox w-3.5 h-3.5 lg:w-4 lg:h-4 border-slate-200 rounded-none checked:bg-indigo-600 transition-all">
+                            <span class="text-[10px] lg:text-[11px] uppercase tracking-widest text-slate-500 group-hover:text-slate-900 leading-none">
+                                {{ label }}
+                            </span>
                         </label>
                         {% endfor %}
                     </div>
@@ -93,6 +115,19 @@
         </div>
     </div>
 </section>
+
+<script>
+    function toggleFilters() {
+        const sidebar = document.getElementById('filterSidebar');
+        if (sidebar.classList.contains('hidden')) {
+            sidebar.classList.remove('hidden');
+            // Optional: Scroll to top of filters when opened
+            sidebar.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            sidebar.classList.add('hidden');
+        }
+    }
+</script>
 
 <script>
     function resetFilters() {
