@@ -1,5 +1,7 @@
 from django.urls import path
 from .views import *
+from django.views.defaults import page_not_found
+
 
 urlpatterns = [
     path('', LandingView.as_view(), name='dashboard'),
@@ -20,4 +22,5 @@ urlpatterns = [
     path('music-scores/song/<slug:slug>/upload-sheet/', UploadSheetView.as_view(), name='upload_sheet'),
     path('music-scores/song/<slug:slug>/upload-audio/', UploadAudioView.as_view(), name='upload_audio'),
     path('music-scores/song/<slug:slug>/upload-midi/', UploadMidiView.as_view(), name='upload_midi'),
+    path('404-test/', lambda request: page_not_found(request, exception=None)),
 ]

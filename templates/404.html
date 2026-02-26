@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}404 — Page Not Found · Cantus{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/404.css' %}">
+
+<main class="e404" aria-labelledby="e404Heading">
+
+  <!-- Background stave texture + orb glows come from CSS ::before / ::after -->
+  <div class="e404-grain" aria-hidden="true"></div>
+
+  <div class="e404-inner container">
+
+    <!-- Left column: content -->
+    <div class="e404-content">
+
+      <!-- Eyebrow -->
+      <div class="e404-eyebrow" aria-label="Error code">
+        <span class="e404-eyebrow-line" aria-hidden="true"></span>
+        Error 404
+      </div>
+
+      <!-- Giant ghost number -->
+      <div class="e404-number" aria-hidden="true">404</div>
+
+      <!-- Heading -->
+      <h1 id="e404Heading" class="e404-title">
+        Page not Found.
+        <em></em>
+      </h1>
+
+      <!-- Sub-copy -->
+      <p class="e404-desc">
+        The page you're looking for has been moved, removed, or never
+        existed in our archive. Perhaps it was misplaced between the staves.
+      </p>
+
+      <!-- Action buttons -->
+      <div class="e404-actions">
+        <a href="{% url 'dashboard' %}" class="e404-btn-primary">
+          Return Home
+          <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+          </svg>
+        </a>
+        <a href="{% url 'song_library' %}" class="e404-btn-secondary">
+          Browse Archive
+        </a>
+      </div>
+
+      <!-- Quick links -->
+      <div class="e404-links">
+        <span class="e404-links-label">Or try:</span>
+        <a href="{% url 'song_library' %}?part=kyrie"  class="e404-link">Kyrie</a>
+        <a href="{% url 'song_library' %}?part=gloria" class="e404-link">Gloria</a>
+        <a href="{% url 'song_library' %}?part=agnus"  class="e404-link">Agnus Dei</a>
+        <a href="{% url 'upload_song' %}"              class="e404-link">Upload</a>
+      </div>
+
+    </div>
+
+    <!-- Right column: decorative animated staff -->
+    <div class="e404-visual" aria-hidden="true">
+
+      <!-- Three staff systems with fading notes -->
+      <div class="e404-staff-wrap">
+
+        <div class="e404-system">
+          <div class="e404-system-clef">𝄞</div>
+          <div class="e404-lines">
+            <div class="e404-line"></div>
+            <div class="e404-line"></div>
+            <div class="e404-line"></div>
+            <div class="e404-line"></div>
+            <div class="e404-line"></div>
+          </div>
+          <span class="e404-note e404-note--1">♩</span>
+          <span class="e404-note e404-note--2">♪</span>
+          <span class="e404-note e404-note--3">♫</span>
+        </div>
+
+        <div class="e404-system e404-system--mid">
+          <div class="e404-system-clef">𝄢</div>
+          <div class="e404-lines">
+            <div class="e404-line"></div>
+            <div class="e404-line"></div>
+            <div class="e404-line"></div>
+            <div class="e404-line"></div>
+            <div class="e404-line"></div>
+          </div>
+          <span class="e404-note e404-note--4">♩</span>
+          <span class="e404-note e404-note--5">♪</span>
+        </div>
+
+        <div class="e404-system e404-system--low">
+          <div class="e404-system-clef">𝄞</div>
+          <div class="e404-lines">
+            <div class="e404-line"></div>
+            <div class="e404-line"></div>
+            <div class="e404-line"></div>
+            <div class="e404-line"></div>
+            <div class="e404-line"></div>
+          </div>
+          <span class="e404-note e404-note--6">♫</span>
+          <span class="e404-note e404-note--7">♩</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+{% endblock %}

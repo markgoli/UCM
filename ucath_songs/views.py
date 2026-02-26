@@ -19,7 +19,7 @@ class LandingView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['mass_parts'] = Song.mass_parts
-        
+        context['recent_songs'] = Song.objects.filter(status='published').order_by('-created_at')[:4]
         return context
 
 
@@ -353,19 +353,35 @@ class UploadMidiView(AssetUploadBaseView):
     def post(self, request, slug):
         song = get_object_or_404(Song, slug=slug)
         file = request.FILES.get('file')
+        cloud_link = request.POST.get('cloud_link')
         version = request.POST.get('midi_version', 'Synthesized Logic')
         
-        if file:
-            MidiFile.objects.create(song=song, midi_file=file, midi_version=version)
-            messages.success(request, "Midi sequence added.")
+        if not file and not cloud_link:
+            messages.error(request, "Midi Sequence not added. Please select valid files.")
+        else:
+            if file:
+                MidiFile.objects.create(song=song, midi_file=file, midi_version=version)
+
+            if cloud_link:
+                MidiFile.objects.create(song=song, midi_link=cloud_link, midi_version=version)
+
+            if file and cloud_link:
+                message = "Midi Sequence Assets Added Successfully."
+            elif file:
+                message = f'Midi sequence "{file}" added successfully.'
+            else:
+                message = f'Midi Cloud Link "{cloud_link}" added successfully.'
+
+            messages.success(request, message)
+                
         return redirect(self.get_success_url(slug))
+
 
 class SongIndexListView(ListView):
     model = Song
     template_name = 'song_links.html'
     context_object_name = 'songs'
     ordering = ['title']
-
 
 
 def download_sheet(request, sheet_id):

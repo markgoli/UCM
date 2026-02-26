@@ -1,227 +1,164 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Cantus - Digital Ledger of Liturgical Music</title>
-        <link rel="icon" type="image/x-icon" href="{% static 'images/cantus.png' %}">
-        <script src="https://cdn.tailwindcss.com"></script>
-        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="{% static 'css/main.css' %}">
-        
-    </head>
-      
-    <body class="antialiased">
-        {% include 'navbar.html' %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cantus - Digital Ledger of Liturgical Catholic Music</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'images/cantus.png' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
 
-        <div id="dynamic-alerts-container" class="fixed top-8 right-8 z-[2000] flex flex-col gap-4 w-full max-w-sm pointer-events-none">
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="django-message pointer-events-auto transform transition-all duration-500 translate-x-0 opacity-100 flex items-stretch bg-white border border-slate-200 shadow-xl rounded-none overflow-hidden" 
-                         role="alert">
-                        
-                        <div class="w-1.5 {% if message.tags == 'success' %}bg-emerald-600{% elif message.tags == 'error' or message.tags == 'danger' %}bg-red-600{% else %}bg-indigo-600{% endif %}"></div>
-                        
-                        <div class="flex-1 p-5 flex items-start gap-4">
-                            <div class="mt-0.5">
-                                {% if message.tags == 'success' %}
-                                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
-                                {% elif message.tags == 'error' or message.tags == 'danger' %}
-                                    <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                {% else %}
-                                    <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                {% endif %}
-                            </div>
-        
-                            <div class="flex-1">
-                                <p class="text-[10px] uppercase tracking-[0.2em] font-black text-slate-400 mb-1">
-                                    {% if message.tags %}{{ message.tags }}{% else %}Notification{% endif %}
-                                </p>
-                                <p class="text-xs text-slate-700 font-medium leading-relaxed">
-                                    {{ message }}
-                                </p>
-                            </div>
-        
-                            <button onclick="this.parentElement.parentElement.remove()" class="text-slate-300 hover:text-slate-900 transition-colors">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                            </button>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        </div>
+<body>
+  {% include 'navbar.html' %}
 
-        <main class="main-content">
-            {% block content %}{% endblock %}
-        </main>
-
-        <div id="loginModal" class="fixed inset-0 z-[100] hidden items-center justify-center px-6">
-            <div class="absolute inset-0 bg-slate-950/40 backdrop-blur-[2px]" onclick="toggleModal()"></div>
-            
-            <div class="relative w-full max-w-4xl bg-white rounded-none overflow-hidden transform transition-all flex flex-col md:flex-row min-h-[300px] border border-slate-200">
-                
-                <div class="w-full md:w-[35%] bg-[#0f172a] p-10 flex flex-col justify-between text-white relative">
-                    <div class="absolute top-0 right-0 opacity-[0.05] pointer-events-none">
-                        <svg width="200" height="200" viewBox="0 0 24 24" fill="white">
-                            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-                        </svg>
-                    </div>
-    
-                    <div>
-                        <span class="serif text-2xl italic block mb-4">Cantus — UCM</span>
-                        <div class="h-[1px] w-12 bg-indigo-500"></div>
-                    </div>
-    
-                    <div class="space-y-4">
-                        <p class="text-[9px] uppercase tracking-[0.3em] font-bold text-slate-400 leading-relaxed">
-                            Uganda Catholic Music <br> Digital Archive & <br> Manuscript Repository
-                        </p>
-                        <p class="text-[9px] text-indigo-400 font-bold uppercase tracking-widest">Est. MMXXVI</p>
-                    </div>
-                </div>
-    
-                <div class="flex-1 p-10 md:p-16 relative bg-white">
-                    <button onclick="toggleModal()" class="absolute top-8 right-8 text-slate-400 hover:text-slate-950 transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-    
-                    <div class="mb-12">
-                        <h2 class="serif text-4xl text-slate-900 mb-2">Sign In</h2>
-                    </div>
-    
-                    <form method="POST" action="{% url 'login' %}" class="space-y-10">
-                        {% csrf_token %}
-                        
-                        <div class="group border-b border-slate-200 focus-within:border-slate-950 transition-all py-1">
-                            <label for="username" class="block text-[9px] uppercase tracking-[0.2em] font-black text-slate-600 mb-1">Username / Email</label>
-                            <input type="text" name="username" id="username" required
-                                class="w-full bg-transparent outline-none text-slate-900 text-sm py-2 placeholder:text-slate-400"
-                                placeholder="Credential ID">
-                        </div>
-    
-                        <div class="group border-b border-slate-200 focus-within:border-slate-950 transition-all py-1">
-                            <div class="flex justify-between items-center mb-1">
-                                <label for="password" class="text-[9px] uppercase tracking-[0.2em] font-black text-slate-600">Password</label>
-                                <a href="#" class="text-[9px] uppercase tracking-widest text-slate-600 hover:text-slate-950 transition-colors">Lost Access?</a>
-                            </div>
-                            <input type="password" name="password" id="password" required
-                                class="w-full bg-transparent outline-none text-slate-900 text-sm py-2 placeholder:text-slate-400"
-                                placeholder="••••••••">
-                        </div>
-    
-                        <div class="flex flex-col gap-6">
-                            <button type="submit" 
-                                class="w-full bg-slate-950 text-white text-[10px] uppercase tracking-[0.3em] font-bold py-5 hover:bg-indigo-950 transition-all shadow-sm">
-                                Authenticate Access
-                            </button>
-                        </div>
-                    </form>
-                </div>
+  <!-- Toast Alerts -->
+  <div class="toast-container" role="region" aria-live="polite">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="toast" role="alert">
+          <div class="toast-accent {% if message.tags == 'success' %}toast-accent--success{% elif message.tags == 'error' or message.tags == 'danger' %}toast-accent--error{% else %}toast-accent--info{% endif %}"></div>
+          <div class="toast-body">
+            <svg class="toast-icon" fill="none" stroke="{% if message.tags == 'success' %}#10b981{% elif message.tags == 'error' or message.tags == 'danger' %}#ef4444{% else %}#6366f1{% endif %}" viewBox="0 0 24 24">
+              {% if message.tags == 'success' %}
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              {% elif message.tags == 'error' or message.tags == 'danger' %}
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              {% else %}
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              {% endif %}
+            </svg>
+            <div class="toast-text-group">
+              <p class="toast-tag">{% if message.tags %}{{ message.tags }}{% else %}Notice{% endif %}</p>
+              <p class="toast-msg">{{ message }}</p>
             </div>
+          </div>
+          <button onclick="this.closest('.toast').remove()" class="toast-close" aria-label="Dismiss">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
         </div>
+      {% endfor %}
+    {% endif %}
+  </div>
 
-        <footer class="border-t border-slate-200 bg-[#fcfcfb] pt-8 pb-8">
-            <div class="max-w-7xl mx-auto px-6">
-                <div class="flex flex-col lg:flex-row justify-between items-center lg:items-center gap-6 mb-8">
-                    <div class="flex flex-col items-center lg:items-start">
-                        <span class="serif text-2xl lg:text-2xl italic tracking-tight text-slate-900">
-                            Can<span class="text-3xl text-purple-600">✝</span>us
-                        </span>
-                        <p class="text-[9px] font-mono uppercase tracking-[0.3em] text-slate-400 mt-2 text-center lg:text-left">
-                            Uganda Catholic Music Exchange
-                        </p>
-                    </div>
-        
-                    <div class="flex items-center justify-center flex-wrap gap-4 md:gap-6">
-                        <div class="flex items-center gap-2">
-                            <span class="relative flex h-2 w-2">
-                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                            </span>
-                            <span class="text-[9px] font-black uppercase tracking-widest text-slate-500 whitespace-nowrap">Archive Online</span>
-                        </div>
-                        <div class="hidden sm:block w-px h-4 bg-slate-200"></div>
-                        <div class="text-[9px] font-black uppercase tracking-widest text-slate-500 whitespace-nowrap">
-                            <a href="{% url 'song_library' %}" class="hover:text-indigo-600 transition-colors">Latest Scores</a> 
-                            <span class="text-indigo-600">|</span>
-                            <a href="{% url 'song_links' %}" class="hover:text-indigo-600 transition-colors">Liturgical Index</a>
-                        </div>
-                    </div>
-                </div>
-        
-                <!-- <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8 border-y border-slate-100 py-10 justify-items-center lg:justify-items-start">
-                    <div class="space-y-4 text-center lg:text-left">
-                        <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-900">Archive</h4>
-                        <ul class="space-y-2 text-[10px] uppercase tracking-widest text-slate-500">
-                            <li><a href="{% url 'song_library' %}" class="hover:text-indigo-600 transition-colors">Latest Scores</a></li>
-                            <li><a href="{% url 'song_links' %}" class="hover:text-indigo-600 transition-colors">Liturgical Index</a></li>
-                        </ul>
-                    </div>
-                
-                    <div class="space-y-4 text-center lg:text-left">
-                        <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-900">Community</h4>
-                        <ul class="space-y-2 text-[10px] uppercase tracking-widest text-slate-500">
-                            <li><a href="{% url 'about' %}" class="hover:text-indigo-600 transition-colors">Contributors</a></li>
-                            <li><a href="{% url 'about' %}" class="hover:text-indigo-600 transition-colors">UCM Exchange</a></li>
-                        </ul>
-                    </div>
-                </div> -->
-        
-                <div class="flex flex-col sm:flex-row justify-between items-center gap-6">
-                    <p class="text-slate-400 text-[9px] lg:text-[10px] uppercase tracking-[0.15em] text-center sm:text-left">
-                        &copy; {% now "Y" %} <span class="font-bold text-slate-600">Cantus Archive</span>. 
-                        <span class="block sm:inline mt-1 sm:mt-0">Handcrafted for the Global Music Community.</span>
-                    </p>
-                    
-                    <div class="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-[9px] font-black tracking-widest">
-                        <div class="flex items-center gap-4">
-                            <a href="#" class="text-slate-400 hover:text-slate-900">Privacy</a>
-                            <a href="#" class="text-slate-400 hover:text-slate-900">Terms</a>
-                        </div>
-                        <span class="hidden xs:block text-slate-200">|</span>
-                        <span class="text-slate-600 italic serif normal-case">Ad majorem Dei gloriam</span>
-                    </div>
-                </div>
-            </div>
-        </footer>
+  <!-- Main Content -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Find all messages
-                const alerts = document.querySelectorAll('.django-message');
-                
-                alerts.forEach(alert => {
-                    // Only auto-hide success or info messages
-                    if (alert.innerText.toLowerCase().includes('success') || alert.innerText.toLowerCase().includes('info')) {
-                        setTimeout(() => {
-                            alert.style.opacity = '0';
-                            alert.style.transform = 'translateX(20px)';
-                            setTimeout(() => alert.remove(), 500);
-                        }, 5000); // 5 seconds
-                    }
-                });
-            });
-        </script>
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-backdrop" onclick="toggleModal()"></div>
+    <div class="modal-box">
 
-        <script>
-            function toggleModal() {
-                const modal = document.getElementById('loginModal');
-                if (modal.classList.contains('hidden')) {
-                    modal.classList.remove('hidden');
-                    modal.classList.add('flex');
-                    document.body.style.overflow = 'hidden'; // Prevent scroll
-                } else {
-                    modal.classList.remove('flex');
-                    modal.classList.add('hidden');
-                    document.body.style.overflow = 'auto'; // Re-enable scroll
-                }
-            }
-        </script>
+      <div class="modal-sidebar">
+        <div class="modal-sidebar-logo">Can<span class="cross">✝</span>us</div>
+        <div class="modal-sidebar-foot">
+          <p class="modal-sidebar-desc">Uganda Catholic<br>Music Exchange<br>Digital Archive</p>
+          <p class="modal-sidebar-motto">Ad majorem Dei gloriam</p>
+        </div>
+      </div>
 
-        <!-- Scripts -->
-        {% block extra_js %}{% endblock %}
-    </body>
+      <div class="modal-main">
+        <button onclick="toggleModal()" class="modal-close" aria-label="Close dialog">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+
+        <h2 id="modalTitle" class="modal-title">Sign In</h2>
+        <p class="modal-subtitle">Access the Cantus archive</p>
+
+        <form method="POST" action="{% url 'login' %}">
+          {% csrf_token %}
+          <div class="modal-field">
+            <label class="modal-label" for="username">Username / Email</label>
+            <input type="text" name="username" id="username" required
+              class="modal-input" placeholder="Your credential ID" autocomplete="username">
+          </div>
+          <div class="modal-field">
+            <label class="modal-label" for="password">
+              Password
+              <a href="#">Lost access?</a>
+            </label>
+            <input type="password" name="password" id="password" required
+              class="modal-input" placeholder="••••••••" autocomplete="current-password">
+          </div>
+          <button type="submit" class="modal-submit">Authenticate Access</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-top">
+      <div>
+        <span class="footer-logo">Can<span class="cross">✝</span>us</span>
+        <p class="footer-tagline">Uganda Catholic Music Exchange</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <p class="footer-col-head">Archive</p>
+          <a href="{% url 'song_library' %}" class="footer-link">Score Library</a>
+          <a href="{% url 'song_links' %}" class="footer-link">All Hymns</a>
+          <a href="{% url 'upload_song' %}" class="footer-link">Upload Score</a>
+        </div>
+        <div class="footer-col">
+          <p class="footer-col-head">Company</p>
+          <a href="{% url 'about' %}" class="footer-link">About Us</a>
+          <a href="#" class="footer-link">Privacy</a>
+          <a href="#" class="footer-link">Terms</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">&copy; {% now "Y" %} Cantus Archive. Handcrafted for the global music community.</p>
+      <div class="footer-status">
+        <div class="footer-status-dot"></div>
+        <span class="footer-status-text">Archive Online</span>
+      </div>
+      <span class="footer-motto">Ad majorem Dei gloriam</span>
+    </div>
+  </footer>
+
+  <script>
+    /* ── Modal ── */
+    function toggleModal() {
+      const modal = document.getElementById('loginModal');
+      const active = modal.classList.contains('active');
+      modal.classList.toggle('active', !active);
+      document.body.style.overflow = active ? '' : 'hidden';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') toggleModal(); });
+
+    /* ── Toast auto-dismiss ── */
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.toast').forEach(toast => {
+        const txt = toast.innerText.toLowerCase();
+        if (txt.includes('success') || txt.includes('info')) {
+          setTimeout(() => {
+            toast.style.transition = 'opacity 0.4s, transform 0.4s';
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(14px)';
+            setTimeout(() => toast.remove(), 400);
+          }, 5000);
+        }
+      });
+    });
+
+    /* ── Nav scroll tint ── */
+    const navRoot = document.querySelector('.nav-root');
+    window.addEventListener('scroll', () => {
+      navRoot.classList.toggle('scrolled', window.scrollY > 24);
+    }, { passive: true });
+  </script>
+
+  {% block extra_js %}{% endblock %}
+</body>
 </html>

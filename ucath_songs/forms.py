@@ -216,25 +216,25 @@ class SongForm(forms.ModelForm):
 
         # Keep your professional styling here
         self.fields['title'].widget.attrs.update({
-            'class': 'w-full px-0 py-4 font-medium text-2xl bg-transparent border-0 border-b-2 border-slate-200 rounded-none focus:border-indigo-600 outline-none transition-all text-slate-900',
+            'class': 'w-full px-2 py-2 font-medium text-2xl bg-transparent border-b border-slate-200 rounded outline-none transition-all text-slate-900',
             'placeholder': 'Enter manuscript title...'
         })
         
         self.fields['composer'].widget.attrs.update({
-            'class': 'w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-indigo-500 outline-none transition-all text-sm'
+            'class': 'w-full px-4 py-3 bg-slate-50 border-b border-slate-200 rounded outline-none transition-all text-sm'
         })
 
         self.fields['arranged_by'].widget.attrs.update({
-            'class': 'w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-indigo-500 outline-none transition-all text-sm'
+            'class': 'w-full px-4 py-3 bg-slate-50 border-b border-slate-200 rounded outline-none transition-all text-sm'
         })
         
         self.fields['youtube_link'].widget.attrs.update({
-            'class': 'w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-indigo-500 outline-none transition-all text-sm font-mono',
+            'class': 'w-full px-4 py-3 bg-slate-50 border-b border-slate-200 rounded outline-none transition-all text-sm font-mono',
             'placeholder': 'https://youtube.com/...'
         })
 
         self.fields['mto_number'].widget.attrs.update({
-            'class': 'w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-indigo-500 outline-none transition-all text-sm'
+            'class': 'w-full px-4 py-3 bg-slate-50 border-b border-slate-200 rounded outline-none transition-all text-sm'
         })
 
         # Apply basic rounded-xl styles to selectors

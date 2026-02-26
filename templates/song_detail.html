@@ -5,7 +5,7 @@
 
 {% block content %}
 <section class="bg-[#f4f4f2] min-h-screen">
-    <div class="px-6 lg:px-16 py-8 border-b border-slate-100 flex items-center justify-between bg-white sticky top-0 z-40">
+    <div class="px-4 md:px-10 lg:px-16 py-4 md:py-6 lg:py-8 border-b border-slate-100 flex flex-col md:flex-row items-center justify-between bg-white/95 backdrop-blur-md sticky top-0 z-40 gap-4 md:gap-0">
         <div class="flex items-center gap-4 text-[10px] uppercase tracking-[0.2em] font-bold text-slate-400">
             <a href="{% url 'song_library' %}" class="hover:text-slate-900 transition">Library</a>
             <span>/</span>
@@ -181,42 +181,48 @@
         </div>
     </div>
 
-    <div id="globalPlayer" class="fixed bottom-0 left-0 right-0 bg-[#0f192a] text-white z-50 px-10 py-6 border-t border-white/10 shadow-2xl translate-y-full transition-transform duration-500">
-        <div class="max-w-7xl mx-auto flex items-center gap-12">
-            <div class="flex items-center gap-4 min-w-[250px]">
-                <div id="playerVinyl" class="w-10 h-10 bg-indigo-600 flex items-center justify-center animate-pulse">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+    <div id="globalPlayer" class="fixed bottom-0 left-0 right-0 bg-[#0f192a] text-white z-50 px-6 md:px-10 py-4 md:py-6 border-t border-white/10 shadow-2xl translate-y-full transition-transform duration-500">
+        <div class="max-w-7xl mx-auto flex items-center gap-4 md:gap-12">
+            
+            <div class="flex items-center gap-3 md:gap-4 min-w-0 md:min-w-[250px]">
+                <div id="playerVinyl" class="w-9 h-9 md:w-10 md:h-10 bg-indigo-600 flex items-center justify-center animate-pulse shrink-0">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                    </svg>
                 </div>
-                <div>
-                    <h6 id="playerTitle" class="text-[10px] uppercase tracking-widest font-black truncate">Select Version</h6>
-                    <p class="text-[9px] text-slate-400 font-medium">Archive Playback</p>
+                <div class="min-w-0">
+                    <h6 id="playerTitle" class="text-[9px] md:text-[10px] uppercase tracking-widest font-black truncate">Select Version</h6>
+                    <p class="text-[8px] md:text-[9px] text-slate-400 font-medium truncate">Archive Playback</p>
                 </div>
             </div>
-
-            <div class="flex-1">
+    
+            <div class="flex-1 min-w-0">
                 <audio id="mainAudio" class="hidden"></audio>
                 <div class="flex items-center gap-6 mb-2 justify-center">
-                    <button onclick="toggleGlobalPlay()" id="globalPlayBtn" class="w-12 h-12 rounded-full bg-white text-slate-900 flex items-center justify-center hover:scale-105 transition shadow-lg">
-                        <svg id="playIcon" class="w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                        <svg id="pauseIcon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                    <button onclick="toggleGlobalPlay()" id="globalPlayBtn" class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white text-slate-900 flex items-center justify-center hover:scale-105 transition shadow-lg shrink-0">
+                        <svg id="playIcon" class="w-4 h-4 md:w-5 md:h-5 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        <svg id="pauseIcon" class="w-4 h-4 md:w-5 md:h-5 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                     </button>
                 </div>
-                <div class="flex items-center gap-4">
-                    <span id="currentTime" class="text-[9px] font-mono text-slate-500 w-10 text-right">00:00</span>
+                <div class="flex items-center gap-2 md:gap-4">
+                    <span id="currentTime" class="text-[8px] md:text-[9px] font-mono text-slate-500 w-8 md:w-10 text-right">00:00</span>
                     <div class="flex-1 h-1 bg-white/10 relative group cursor-pointer" onclick="seek(event)">
                         <div id="progressBar" class="absolute top-0 left-0 h-full bg-indigo-500 w-0"></div>
                     </div>
-                    <span id="totalTime" class="text-[9px] font-mono text-slate-500 w-10">00:00</span>
+                    <span id="totalTime" class="text-[8px] md:text-[9px] font-mono text-slate-500 w-8 md:w-10">00:00</span>
                 </div>
             </div>
-
-            <div class="flex items-center gap-4">
-                <button onclick="document.getElementById('globalPlayer').classList.add('translate-y-full')" class="text-slate-500 hover:text-white transition">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"></path></svg>
+    
+            <div class="flex items-center gap-4 shrink-0">
+                <button onclick="document.getElementById('globalPlayer').classList.add('translate-y-full')" class="text-slate-500 hover:text-white transition p-1">
+                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
                 </button>
             </div>
         </div>
     </div>
+    
 </section>
 
 <script>

@@ -3,209 +3,406 @@
 
 {% block content %}
 
-<header class="hero-v4 text-white pt-20 pb-40 px-8">
-    <div class="musical-lines"></div>
-    <div class="max-w-7xl mx-auto relative z-10">
-        <div class="grid lg:grid-cols-2 gap-20 items-center">
-            
-            <div class="text-left">
-                <div class="inline-flex items-center gap-3 px-4 py-2 bg-white/5 border border-white/10 rounded-full mb-8">
-                    <span class="flex h-2 w-2 rounded-full bg-indigo-400"></span>
-                    <span class="text-[10px] font-bold uppercase tracking-widest text-indigo-200">The 2026 Music Collection is Live</span>
-                </div>
-                
-                <h1 class="serif text-6xl md:text-8xl leading-[0.85] mb-8">
-                    Every Note, <br>
-                    Every Instrument.
-                    <span class="text-xl md:text-3xl italic text-slate-400">Master the art of the written score.</span>
-                </h1>
-                
-                <p class="text-slate-400 text-lg max-w-lg leading-relaxed mb-12">
-                    Discover a world-class archive of digital notation. From classical manuscripts to contemporary film scores, curated for professional performance.
-                </p>
-            </div>
+<link rel="stylesheet" href="{% static 'css/dboard.css' %}">
 
-            <div class="hidden lg:block relative group">
-                <div class="aspect-square w-full bg-gradient-to-tr from-[#0f172a] to-[#1e293b] rounded-3xl rotate-3 relative overflow-hidden shadow-2xl border border-white/10 transition-transform duration-500 group-hover:rotate-1">
-                    
-                    <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 20px 20px;"></div>
-                    
-                    <div class="absolute inset-0 bg-black/20"></div>
-            
-                    <div class="absolute inset-8 border border-white/10 p-8 flex flex-col justify-between backdrop-blur-sm bg-white/5">
-                        
-                        <div class="space-y-6">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
-                                    <span class="text-[10px] font-mono text-white/40 uppercase tracking-[0.3em]">Live Feed: Transcription</span>
-                                </div>
-                                <svg class="w-5 h-5 text-white/20" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M19,3H5C3.89,3,3,3.89,3,5v14c0,1.1,0.89,2,2,2h14c1.1,0,2-0.9,2-2V5C21,3.89,20.11,3,19,3z M15.5,19h-3V5h3V19z M9.5,19h-3V5h3 V19z M19,19h-2V5h2V19z M5,19V5h1V19H5z"/>
-                                </svg>
-                            </div>
-            
-                            <div class="flex items-end justify-between h-16 gap-1 px-2">
-                                <div class="w-1 bg-indigo-500/50 animate-[wave_1.2s_ease-in-out_infinite]" style="height: 40%"></div>
-                                <div class="w-1 bg-indigo-400/50 animate-[wave_1.5s_ease-in-out_infinite]" style="height: 80%"></div>
-                                <div class="w-1 bg-white/40 animate-[wave_1s_ease-in-out_infinite]" style="height: 60%"></div>
-                                <div class="w-1 bg-indigo-500/50 animate-[wave_1.8s_ease-in-out_infinite]" style="height: 90%"></div>
-                                <div class="w-1 bg-white/20 animate-[wave_1.3s_ease-in-out_infinite]" style="height: 50%"></div>
-                                <div class="w-1 bg-indigo-400/50 animate-[wave_1.6s_ease-in-out_infinite]" style="height: 70%"></div>
-                                <div class="w-1 bg-indigo-500/50 animate-[wave_1.1s_ease-in-out_infinite]" style="height: 40%"></div>
-                            </div>
-                        </div>
-            
-                        <div class="flex justify-between items-end">
-                            <div class="space-y-1">
-                                <div class="flex gap-1">
-                                    <div class="w-1 h-1 bg-indigo-500 rounded-full"></div>
-                                    <div class="w-1 h-1 bg-white/20 rounded-full"></div>
-                                    <div class="w-1 h-1 bg-white/20 rounded-full"></div>
-                                </div>
-                                <p class="text-[9px] font-mono text-white/30 uppercase tracking-widest">Master Studio v.3</p>
-                            </div>
-                            <div class="serif text-4xl italic text-white/10 text-right uppercase tracking-tighter transition-all group-hover:text-white/30">
-                                Pianoforte
-                            </div>
-                        </div>
+<section class="hero" aria-label="Hero">
+  <div class="hero-grain" aria-hidden="true"></div>
 
-                        <div class="relative h-24 w-full bg-slate-900/50 rounded-lg p-1 flex gap-[2px] overflow-hidden border border-white/5">
-                            {% for i in "123456789012" %}
-                            <div class="flex-1 bg-white/90 rounded-b-sm relative group/key transition-all duration-300 hover:bg-white hover:translate-y-[2px]">
-                                <div class="absolute bottom-0 left-0 right-0 h-0 bg-indigo-500/20 group-hover/key:h-full transition-all duration-500"></div>
-                            </div>
-                            {% endfor %}
-            
-                            <div class="absolute top-1 left-[7%] w-[6%] h-14 bg-slate-800 rounded-b-sm z-10 shadow-lg border-x border-white/5"></div>
-                            <div class="absolute top-1 left-[15%] w-[6%] h-14 bg-slate-800 rounded-b-sm z-10 shadow-lg border-x border-white/5"></div>
-                            
-                            <div class="absolute top-1 left-[32%] w-[6%] h-14 bg-slate-800 rounded-b-sm z-10 shadow-lg border-x border-white/5"></div>
-                            <div class="absolute top-1 left-[40%] w-[6%] h-14 bg-slate-800 rounded-b-sm z-10 shadow-lg border-x border-white/5"></div>
-                            <div class="absolute top-1 left-[48%] w-[6%] h-14 bg-slate-800 rounded-b-sm z-10 shadow-lg border-x border-white/5"></div>
-            
-                            <div class="absolute top-1 left-[65%] w-[6%] h-14 bg-slate-800 rounded-b-sm z-10 shadow-lg border-x border-white/5"></div>
-                            <div class="absolute top-1 left-[73%] w-[6%] h-14 bg-slate-800 rounded-b-sm z-10 shadow-lg border-x border-white/5"></div>
-                            
-                            <div class="absolute top-1 left-[90%] w-[6%] h-14 bg-slate-800 rounded-b-sm z-10 shadow-lg border-x border-white/5"></div>
-                        </div>
-                    </div>
-                </div>
-            
-                <div class="absolute -bottom-8 -left-8 bg-white p-6 rounded-2xl shadow-2xl max-w-[200px] -rotate-3 border border-slate-100 transition-all duration-500 group-hover:rotate-0 group-hover:-translate-y-2">
-                    <div class="flex gap-1 mb-3">
-                        <svg class="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                    </div>
-                    <p class="text-slate-900 font-bold text-sm mb-2 italic serif leading-tight">"The gold standard for contemporary liturgical arrangements."</p>
-                    <div class="flex items-center gap-2">
-                        <div class="w-4 h-[1px] bg-slate-200"></div>
-                        <p class="text-[8px] uppercase tracking-widest text-slate-400 font-black">London Symphony</p>
-                    </div>
-                </div>
-            </div>
+  <!-- Main content grid -->
+  <div class="hero-body container">
+
+    <!-- Left: text -->
+    <div>
+      <div class="hero-badge" aria-label="Status: 2026 Collection live">
+        <span class="hero-badge-dot" aria-hidden="true"></span>
+        <span class="hero-badge-text">2026 Collection · Now Live</span>
+      </div>
+
+      <h1 class="hero-title">
+        Every <em> Worship Note</em>
+        <span class="hero-title-ghost">Composed & Preserved.</span>
+      </h1>
+
+      <span class="hero-rule" aria-hidden="true"></span>
+
+      <p class="hero-desc">
+        A world-class digital archive of liturgical music — from classical manuscripts
+        to contemporary arrangements, curated for choristers and composers worldwide.
+      </p>
+
+      <div class="hero-stats" role="list" aria-label="Archive statistics">
+        <div class="hero-stat" role="listitem">
+          <div class="hero-stat-num">500<sup>k+</sup></div>
+          <div class="hero-stat-label">Manuscripts</div>
         </div>
-
-        <div class="mt-16 max-w-2xl mx-auto px-5">
-            <form action="{% url 'song_library' %}" method="GET" 
-                class="group bg-white rounded-full p-2 flex items-center border border-slate-200 transition-all duration-300 focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-500/5">
-                
-                <div class="flex items-center flex-1 px-3 md:px-5 gap-3">
-                    <svg class="w-4 h-4 text-slate-300 group-focus-within:text-indigo-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                    
-                    <input type="text" name="q" 
-                        placeholder="Search archive..." 
-                        class="w-full text-slate-900 focus:outline-none placeholder:text-slate-300 text-[12px] md:text-sm font-medium bg-transparent px-3 py-2.5"
-                        value="{{ request.GET.q|default:'' }}">
-                </div>
-        
-                <button type="submit" 
-                    class="bg-slate-900 text-white flex items-center justify-center gap-2 rounded-full font-black text-[9px] uppercase tracking-[0.15em] hover:bg-indigo-600 transition-all px-4 md:px-6 h-8 md:h-9 shadow-sm active:scale-95 shrink-0 mr-0.5">
-                    <span class="hidden xs:block">Search</span>
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                    </svg>
-                </button>
-            </form>
-        
-            <div class="flex flex-wrap justify-center items-center gap-x-4 gap-y-2 mt-5 text-slate-400 text-[8px] md:text-[9px] uppercase tracking-[0.2em] font-bold">
-                <span class="text-slate-300">Popular:</span>
-                <a href="{% url 'song_library' %}?q=Gloria" class="hover:text-indigo-600 transition border-b border-transparent hover:border-indigo-200 pb-0.5">Gloria</a>
-                <span class="w-1 h-1 rounded-full bg-slate-200"></span> <a href="{% url 'song_library' %}?q=Amazing" class="hover:text-indigo-600 transition border-b border-transparent hover:border-indigo-200 pb-0.5">Amazing Grace</a>
-                <span class="w-1 h-1 rounded-full bg-slate-200"></span>
-                <a href="{% url 'song_library' %}?part=kyrie" class="hover:text-indigo-600 transition border-b border-transparent hover:border-indigo-200 pb-0.5">Kyrie</a>
-            </div>
+        <div class="hero-stat" role="listitem">
+          <div class="hero-stat-num">62</div>
+          <div class="hero-stat-label">Languages</div>
         </div>
-
+        <div class="hero-stat" role="listitem">
+          <div class="hero-stat-num">I<sup>st</sup></div>
+          <div class="hero-stat-label">Est. MMXXVI</div>
+        </div>
+      </div>
     </div>
-</header>
 
-<section class="bg-[#fcfcfb] py-24 px-6 lg:px-16 border-t border-slate-100">
-    <div class="max-w-7xl mx-auto">
-        
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-            <div class="max-w-xl">
-                <span class="text-indigo-600 text-[10px] uppercase tracking-[0.3em] font-bold mb-4 block">Ordinarium Missae</span>
-                <h2 class="serif text-5xl text-slate-900 mb-4">Explore by <span class="italic text-slate-500">Mass Part</span></h2>
-                <p class="text-slate-500 text-base leading-relaxed font-medium">
-                    Select a liturgical part of mass to filter our library of over 500,000 verified manuscripts and digital arrangements.
-                </p>
-            </div>
-            <p class="text-slate-500 text-[11px] uppercase tracking-widest hidden md:block">Filter archive by liturgical function</p>
+    <!-- Right: floating score card -->
+    <aside class="hero-card" aria-label="Live transcription preview">
+      <div class="hero-card-header">
+        <span class="hero-card-label">Live Transcription</span>
+        <div class="hero-card-rec" aria-label="Recording">
+          <span class="hero-card-rec-dot" aria-hidden="true"></span>
+          <span class="hero-card-rec-text">REC</span>
+        </div>
+      </div>
+
+      <!-- Animated staff notation -->
+        <div class="staff" aria-hidden="true">
+            <div class="staff-line"></div>
+            <div class="staff-line"></div>
+            <div class="staff-line"></div>
+            <div class="staff-line"></div>
+            <div class="staff-line"></div>
+            <span class="staff-note staff-note--1">🎻</span>
+            <span class="staff-note staff-note--2">🎶</span>
+            <span class="staff-note staff-note--3">♩</span>
+            <span class="staff-note staff-note--4">🎼</span>
+            <span class="staff-note staff-note--5">🎺</span>
         </div>
 
-        <div class="space-y-8">
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-                
-                {% for value, label in mass_parts %}
-                <a href="{% url 'song_library' %}?part={{ value }}" 
-                   class="group relative overflow-hidden rounded-2xl bg-[#1e293b] border border-white/5 p-4 transition-all duration-500 hover:bg-indigo-600 hover:-translate-y-1 shadow-xl">
-                    
-                    <div class="relative z-10">
-                        <h3 class="serif text-xl text-white leading-tight">
-                            {{ label }}
-                        </h3>
-                    </div>
-        
-                    <div class="absolute -right-4 -bottom-4 opacity-[0.03] group-hover:opacity-10 transition-opacity">
-                        <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="0.5">
-                            <circle cx="12" cy="12" r="10"/>
-                            <path d="M12 2v20M2 12h20"/>
-                        </svg>
-                    </div>
-                </a>
-                {% empty %}
-                <div class="col-span-full py-12 text-center border-2 border-dashed border-white/5 rounded-3xl">
-                    <p class="text-slate-500 uppercase text-[10px] tracking-widest">No liturgical parts defined in registry.</p>
-                </div>
-                {% endfor %}
-        
-            </div>
+      <!-- Waveform bars -->
+      <div class="waveform" aria-hidden="true">
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+      </div>
+
+      <div class="hero-card-meta">
+        <div class="hero-card-title">Gloria in Excelsis</div>
+        <div class="hero-card-sub">Arr. Kiganda · SATB · 2026</div>
+        <div class="hero-card-progress" aria-hidden="true">
+          <div class="progress-fill"></div>
+          <div class="progress-empty"></div>
         </div>
-        
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- Search -->
+  <div class="hero-search container">
+    <form action="{% url 'song_library' %}" method="GET" class="search-form" role="search" aria-label="Search the archive">
+      <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+      </svg>
+      <input
+        type="text"
+        name="q"
+        class="search-input"
+        placeholder="Search by composer, title, liturgical part…"
+        value="{{ request.GET.q|default:'' }}"
+        aria-label="Search query">
+      <button type="submit" class="search-btn">
+        Search
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+        </svg>
+      </button>
+    </form>
+
+    <div class="search-tags" role="list" aria-label="Popular searches">
+      <span class="search-tags-label">Trending:</span>
+      <a href="{% url 'song_library' %}?q=Gloria"   class="search-tag" role="listitem">Gloria</a>
+      <a href="{% url 'song_library' %}?q=Amazing"  class="search-tag" role="listitem">Amazing Grace</a>
+      <a href="{% url 'song_library' %}?part=kyrie" class="search-tag" role="listitem">Kyrie</a>
+      <a href="{% url 'song_library' %}?part=agnus" class="search-tag" role="listitem">Agnus Dei</a>
+      <a href="{% url 'song_library' %}?q=alleluia" class="search-tag" role="listitem">Alleluia</a>
     </div>
+  </div>
+
+  <!-- Ticker strip -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      {% for i in "12" %}
+      <div class="ticker-item">
+        <span class="ticker-text">Uganda Catholic Music</span>
+        <span class="ticker-sep"></span>
+        <span class="ticker-text ticker-text--gold">Digital Archive</span>
+        <span class="ticker-sep"></span>
+        <span class="ticker-text">Liturgical Music Exchange</span>
+        <span class="ticker-sep"></span>
+        <span class="ticker-text">500,000+ Manuscripts</span>
+        <span class="ticker-sep"></span>
+        <span class="ticker-text ticker-text--gold">Est. MMXXVI</span>
+        <span class="ticker-sep"></span>
+        <span class="ticker-text">SATB · SSA · TTBB · Organ</span>
+        <span class="ticker-sep"></span>
+        <span class="ticker-text">Open Access Repository</span>
+        <span class="ticker-sep"></span>
+        <span class="ticker-text ticker-text--gold">Ad Majorem Dei Gloriam</span>
+        <span class="ticker-sep"></span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
 </section>
 
-<section class="bg-slate-900 py-24 px-6 relative overflow-hidden">
-    <div class="max-w-3xl mx-auto text-center relative z-10 text-white">
-        <h2 class="serif text-5xl mb-6 italic">Publish your work.</h2>
-        <p class="text-slate-400 text-base mb-10 leading-relaxed">
-            Are you a composer or an arranger? <br>
-            Share your music with a community of Choristers.
+
+<section class="parts-section" aria-labelledby="partsHeading">
+  <div class="container" style="position:relative; z-index:1;">
+
+    <div class="parts-header">
+      <div class="parts-header-left">
+        <p class="eyebrow">Ordinarium Missae</p>
+        <h2 id="partsHeading" class="section-title" style="margin:14px 0 14px;">
+          Explore by Mass Part
+        </h2>
+        <p class="section-body">
+          Select a liturgical section to filter our library of verified manuscripts
+          and digital arrangements.
         </p>
-        <div class="flex flex-col sm:flex-row justify-center gap-4">
-            <a href="{% url 'upload_song' %}">
-                <button class="bg-indigo-600 px-10 py-4 rounded-xl font-bold hover:bg-indigo-500 transition">Upload a Score</button>
-            </a>
-            <a href="{% url 'song_library' %}">
-                <button class="bg-slate-800 border border-slate-700 px-10 py-4 rounded-xl font-bold hover:bg-slate-700 transition">Browse Catalog</button>
-            </a>
-        </div>
+      </div>
+      <a href="{% url 'song_library' %}" class="parts-header-right">
+        View Full Library →
+      </a>
     </div>
-    <div class="absolute -top-24 -left-24 w-96 h-96 bg-indigo-500/10 rounded-full blur-[120px]"></div>
+
+    <div class="parts-grid" role="list" aria-label="Mass parts">
+      {% for value, label in mass_parts %}
+
+        {% if forloop.first %}
+          <a href="{% url 'song_library' %}?part={{ value }}"
+             class="part-card part-card--featured"
+             role="listitem">
+            <span class="part-card-num">{{ forloop.counter|stringformat:"02d" }} / {{ mass_parts|length }}</span>
+            <span class="part-card-name">{{ label }}</span>
+            <span class="part-card-arrow" aria-hidden="true">→</span>
+          </a>
+
+        {% elif forloop.counter == 2 %}
+          <a href="{% url 'song_library' %}?part={{ value }}"
+             class="part-card part-card--gold"
+             role="listitem">
+            <span class="part-card-num">{{ forloop.counter|stringformat:"02d" }}</span>
+            <span class="part-card-name">{{ label }}</span>
+            <span class="part-card-arrow" aria-hidden="true">→</span>
+          </a>
+
+        {% else %}
+          <a href="{% url 'song_library' %}?part={{ value }}"
+             class="part-card"
+             role="listitem">
+            <span class="part-card-num">{{ forloop.counter|stringformat:"02d" }}</span>
+            <span class="part-card-name">{{ label }}</span>
+            <span class="part-card-arrow" aria-hidden="true">→</span>
+          </a>
+        {% endif %}
+
+      {% empty %}
+        <div class="parts-empty">No liturgical parts defined in registry.</div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+<section class="features" aria-labelledby="featuresHeading">
+  <div class="container">
+
+    <div class="features-header">
+      <p class="eyebrow">Why Cantus</p>
+      <h2 id="featuresHeading" class="section-title">
+        Built for Choristers.<em></em>
+      </h2>
+    </div>
+
+    <div class="feature-grid" role="list">
+
+      <div class="feature-item" role="listitem">
+        <p class="feat-num">01</p>
+        <svg class="feat-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+            d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+        </svg>
+        <h3 class="feat-title">Verified Manuscripts</h3>
+        <p class="feat-body">Every score is reviewed and verified by our network of musicologists before entering the archive.</p>
+      </div>
+
+      <div class="feature-item" role="listitem">
+        <p class="feat-num">02</p>
+        <svg class="feat-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke-width="1"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+            d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+        </svg>
+        <h3 class="feat-title">Global Community</h3>
+        <p class="feat-body">Connect with composers and choristers from over 62 countries through a shared love of sacred music.</p>
+      </div>
+
+      <div class="feature-item" role="listitem">
+        <p class="feat-num">03</p>
+        <svg class="feat-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+            d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+        </svg>
+        <h3 class="feat-title">Instant Download</h3>
+        <p class="feat-body">Download print-ready PDFs, MusicXML, and MIDI files instantly — no waiting, no subscriptions.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<section class="cta" aria-labelledby="ctaHeading">
+  <div class="cta-inner">
+    <div class="cta-left">
+      <div class="cta-label">
+        <span class="cta-label-line" aria-hidden="true"></span>
+        For Composers
+      </div>
+
+      <h2 id="ctaHeading" class="cta-title">
+        Share your <em>Music sheets</em> with the world.
+      </h2>
+
+      <p class="cta-desc">
+        Are you a composer or arranger? Publish your scores to a global community
+        of choristers, directors, and music lovers.
+      </p>
+
+      <div class="cta-actions">
+        <a href="{% url 'upload_song' %}" class="cta-btn-primary">
+          Upload a Score
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+          </svg>
+        </a>
+        <a href="{% url 'song_library' %}" class="cta-btn-secondary">Browse Archive</a>
+      </div>
+
+      <div class="cta-testimonial">
+        <div class="cta-stars" aria-label="Five stars">
+          <span class="cta-star" aria-hidden="true">★</span>
+          <span class="cta-star" aria-hidden="true">★</span>
+          <span class="cta-star" aria-hidden="true">★</span>
+          <span class="cta-star" aria-hidden="true">★</span>
+          <span class="cta-star" aria-hidden="true">★</span>
+        </div>
+        <blockquote class="cta-quote">
+          "The gold standard for contemporary liturgical arrangements."
+        </blockquote>
+        <div class="cta-attrib">
+          <span class="cta-attrib-line" aria-hidden="true"></span>
+          <span class="cta-attrib-name">London Symphony Choir</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Recent uploads -->
+    <div class="cta-right">
+        <div class="recent-panel">
+  
+          <!-- Header -->
+          <div class="recent-header">
+            <div class="recent-header-left">
+              <span class="recent-live-dot" aria-hidden="true"></span>
+              <span class="recent-eyebrow">Recently Added</span>
+            </div>
+            <a href="{% url 'song_library' %}" class="recent-view-all">
+              View all
+              <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+              </svg>
+            </a>
+          </div>
+  
+          <!-- Cards — view passes `recent_songs` (first 4) -->
+          <div class="recent-list">
+            {% for song in recent_songs %}
+            <a href="{% url 'song_detail' song.slug %}" class="score-card">
+  
+              <!-- Accent bar (colour cycles via nth-child in CSS) -->
+              <span class="score-card-bar" aria-hidden="true"></span>
+  
+              <!-- Index -->
+              <div class="score-card-index" aria-hidden="true">
+                {{ forloop.counter|stringformat:"02d" }}
+              </div>
+  
+              <!-- Main info -->
+              <div class="score-card-body">
+                <div class="score-card-title">{{ song.prp_song_title }}</div>
+                <div class="score-card-meta">
+                  <span>{{ song.composer|default:"Unknown" }}</span>
+                  <span class="score-meta-sep" aria-hidden="true">·</span>
+                  <span>{{ song.voice_type|default:"SATB" }}</span>
+                  {% if song.mass_part %}
+                  <span class="score-meta-sep" aria-hidden="true">·</span>
+                  <span>{{ song.part_of_mass }}</span>
+                  {% endif %}
+                </div>
+              </div>
+  
+              <!-- Right side -->
+              <div class="score-card-aside">
+                {% if forloop.first %}
+                  <span class="score-card-badge score-card-badge--new">New</span>
+                {% else %}
+                  <span class="score-card-badge">{{ song.updated_at|timesince|truncatewords:2 }}</span>
+                {% endif %}
+                <svg class="score-card-arrow" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"/>
+                </svg>
+              </div>
+  
+            </a>
+            {% empty %}
+            <div class="recent-empty">
+              <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                  d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+              </svg>
+              <p>No scores yet.</p>
+              <a href="{% url 'upload_song' %}">Be the first →</a>
+            </div>
+            {% endfor %}
+          </div>
+  
+          <!-- Footer CTA -->
+          <div class="recent-footer">
+            <a href="{% url 'upload_song' %}" class="recent-upload-btn">
+              <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+              </svg>
+              Submit Your Score
+            </a>
+          </div>
+  
+        </div>
+      </div>
+
+  </div>
 </section>
 
 {% endblock %}
