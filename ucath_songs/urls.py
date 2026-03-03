@@ -14,7 +14,7 @@ urlpatterns = [
     path('accounts/login/', UserLoginView.as_view(), name='login'),
     path('logout/', UserLogoutView.as_view(), name='logout'),
     path('archive/links/', SongIndexListView.as_view(), name='song_links'),
-    path('archive/download/<int:sheet_id>/', download_sheet, name='download_sheet'),
+    path('archive/download/<str:slug>/', download_sheet, name='download_sheet'),
     # admin 
     path('scores-catalog/vlists/', AdminArrivalsView.as_view(), name='admin_arrivals'),
     path('music-scores/<slug:slug>/update/', AdminSongUpdateView.as_view(), name='admin_song_detail'),

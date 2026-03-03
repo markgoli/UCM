@@ -19,7 +19,7 @@ class LandingView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['mass_parts'] = Song.mass_parts
-        context['recent_songs'] = Song.objects.filter(status='published').order_by('-created_at')[:4]
+        context['recent_songs'] = Song.objects.filter(status='published').order_by('-created_at')[:5]
         return context
 
 
@@ -336,6 +336,7 @@ class UploadSheetView(AssetUploadBaseView):
         if file:
             MusicSheet.objects.create(song=song, music_sheet=file, ms_version=version)
             messages.success(request, "Folio manuscript added.")
+
         return redirect(self.get_success_url(slug))
 
 class UploadAudioView(AssetUploadBaseView):
@@ -384,9 +385,9 @@ class SongIndexListView(ListView):
     ordering = ['title']
 
 
-def download_sheet(request, sheet_id):
+def download_sheet(request, slug):
     # Fetch the sheet object
-    sheet = get_object_or_404(MusicSheet, id=sheet_id)
+    sheet = get_object_or_404(MusicSheet, slug=slug)
     
     # Ensure the file actually exists on the server
     if not sheet.music_sheet or not os.path.exists(sheet.music_sheet.path):

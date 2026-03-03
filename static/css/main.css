@@ -181,7 +181,7 @@ input[type="checkbox"] {
 
   /* Layout */
   --content-max: 1320px;
-  --content-pad: 64px;
+  --content-pad: 60px;
 }
 
 .bg-gold{

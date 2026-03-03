@@ -144,6 +144,18 @@
     }
 }
 
+.typewriter-cursor {
+  display: inline-block;
+  font-style: normal;
+  color: var(--gold);
+  animation: cursor-blink 0.75s step-start infinite;
+  margin-left: 1px;
+}
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
   .hero-title-ghost {
     display: block;
     padding-top: 20px;

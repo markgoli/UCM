@@ -19,7 +19,7 @@
       </div>
 
       <h1 class="hero-title">
-        Every <em> Worship Note</em>
+        Every <em><span class="typewriter-text"></span><span class="typewriter-cursor">|</span></em>
         <span class="hero-title-ghost">Composed & Preserved.</span>
       </h1>
 
@@ -405,4 +405,55 @@
   </div>
 </section>
 
+<script>
+    (function () {
+      const words = ["Worship Note.", "Sacred Melody", "Instrument.", "Choral Piece.", "Mass Setting."];
+      const el      = document.querySelector('.typewriter-text');
+      const cursor  = document.querySelector('.typewriter-cursor');
+  
+      const TYPE_SPEED   = 160;   // ms per character while typing
+      const DELETE_SPEED = 85;   // ms per character while deleting
+      const PAUSE_AFTER  = 2000; // ms to hold the full word before deleting
+      const PAUSE_BEFORE = 320;  // ms to pause on empty string before next word
+  
+      let wordIndex = 0;
+      let charIndex = 0;
+      let deleting  = false;
+  
+      function tick () {
+        const current = words[wordIndex];
+  
+        if (!deleting) {
+          // --- typing forward ---
+          charIndex++;
+          el.textContent = current.slice(0, charIndex);
+  
+          if (charIndex === current.length) {
+            // word complete — pause, then start deleting
+            deleting = true;
+            setTimeout(tick, PAUSE_AFTER);
+            return;
+          }
+          setTimeout(tick, TYPE_SPEED);
+  
+        } else {
+          // --- deleting backward ---
+          charIndex--;
+          el.textContent = current.slice(0, charIndex);
+  
+          if (charIndex === 0) {
+            // word erased — advance to next word and pause briefly
+            deleting   = false;
+            wordIndex  = (wordIndex + 1) % words.length;
+            setTimeout(tick, PAUSE_BEFORE);
+            return;
+          }
+          setTimeout(tick, DELETE_SPEED);
+        }
+      }
+  
+      // small initial delay so the page has settled before typing starts
+      setTimeout(tick, 800);
+    })();
+  </script>
 {% endblock %}

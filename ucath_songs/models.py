@@ -9,6 +9,7 @@ import os
 from django.core.files.base import ContentFile
 from io import BytesIO
 from PIL import Image
+from .utils import generate_bs64_slug, generate_archive_id
 
 # Create your models here.
 
@@ -49,13 +50,14 @@ class Song(models.Model):
     ]
 
     title = models.CharField(max_length=256)
+    archive_id = models.CharField(max_length=255, blank=True, null=True, unique=True)
     composer = models.CharField(max_length=256)
     arranged_by = models.CharField(max_length=256)
     part_of_mass = models.CharField(choices=mass_parts)
     season = models.CharField(choices=season_choices, default='ordinary')
     mto = models.BooleanField(default=False)
-    mto_number = models.CharField(max_length=256)
-    youtube_link = models.CharField(max_length=256)
+    mto_number = models.CharField(max_length=256, blank=True, null=True)
+    youtube_link = models.CharField(max_length=256, blank=True, null=True)
     status = models.CharField(choices=song_status, default='pending_approval')
     slug = models.SlugField(max_length=220, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -68,20 +70,15 @@ class Song(models.Model):
     def prp_song_title(self):
         return self.title.title()
 
-
-    def generate_slug(self):
-        """Generate a unique 16-character slug"""
-        while True:
-            # Generate 16 character alphanumeric string (uppercase)
-            slug = ''.join(secrets.choice(string.ascii_uppercase + string.digits) for _ in range(16))
-
-            if not Song.objects.filter(slug=slug).exists():
-                return slug
     
     def save(self, *args, **kwargs):
         # Generate slug if not set
         if not self.slug:
-            self.slug = self.generate_slug()
+            self.slug = generate_bs64_slug()
+
+        if not self.archive_id:
+            self.archive_id = generate_archive_id()
+
         super().save(*args, **kwargs)
 
 
@@ -96,16 +93,18 @@ class MusicSheet(models.Model):
     music_sheet = models.FileField(upload_to='music_sheets/')
     thumbnail = models.ImageField(upload_to='music_thumbnails/', null=True, blank=True)
     ms_version = models.CharField(max_length=256, null=True, blank=True)
+    slug = models.SlugField(max_length=220, unique=True, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        # 1. Save the file first
+        if not self.slug:
+            self.slug = generate_bs64_slug()
         super().save(*args, **kwargs)
         
         # 2. Generate thumbnail if missing
         if self.music_sheet and not self.thumbnail:
-            self.generate_thumbnail_pure_python()
-
-    def generate_thumbnail_pure_python(self):
+            self.generate_thumbnail()
+        
+    def generate_thumbnail(self):
         try:
             # Open the PDF directly from the file path
             doc = fitz.open(self.music_sheet.path)
